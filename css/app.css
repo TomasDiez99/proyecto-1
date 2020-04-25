@@ -1,7 +1,4 @@
-body{
-	margin:0px;
-	background-color: lightblue;
-}
+
 .cont-pagina{
 	border:3px solid black;
 }
@@ -13,10 +10,9 @@ body{
 }
 
 .logo-row{
-	height: 50px;
+	height: auto;
 }
-.logo-text{
-	font-size: 30px;
+.logo-height{
 }
 
 .insert-password-row{
@@ -25,4 +21,19 @@ body{
 .result-test{
 	font-size: 25px;
 	color:black;
+}
+
+
+.body-background{
+	background-color: #F4E5B1;
+}
+
+
+.logoImg {
+    height: 100%;
+    width: 100%;
+}
+.logoImg img {
+    height: 100%;
+    width: 100%;
 }
