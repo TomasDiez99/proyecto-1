@@ -1,0 +1,36 @@
+body{
+	margin:5px;
+}
+.cont-pagina{
+	border:3px solid black;
+}
+
+.logo-row{
+	border:1px solid black;
+	height: 50px;
+}
+.logo-col{
+	border:1px dotted black;
+}
+.logo-text{
+	font-size: 30px;
+}
+
+
+
+.insert-password-row{
+	border:1px solid black;
+	height: 60px;
+}
+
+.password-col{
+	border:1px dotted black;
+}
+
+.result-col{
+	border: 1px dotted black;
+}
+.result-test{
+	font-size: 25px;
+	color:black;
+}
