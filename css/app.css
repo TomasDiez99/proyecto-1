@@ -14,14 +14,14 @@
 	border: 2px dotted black;
 }
 
-.result-test{
+.result-text{
 	font-size: 25px;
 	color:black;
 }
 .col-centered{
 	height: auto;
 	float:none;
-}
+} /*TODO: No funciona. No me centra verticalmente el input group*/
 
 .box {
     max-width: 100%;

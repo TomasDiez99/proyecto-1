@@ -11,7 +11,7 @@ function testPassword(){
                            hasLowerCase(password)];
 
     var passStrength = computeStrength(passwordProperties);
-    document.getElementById("resultTest").innerHTML = passStrength;
+    document.getElementById("result-test").innerHTML = passStrength;
     console.clear();
     passwordProperties.forEach(element => {
         console.log(element);
