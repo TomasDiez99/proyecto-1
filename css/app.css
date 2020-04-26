@@ -1,39 +1,29 @@
-
-.cont-pagina{
-	border:3px solid black;
+.body-background{
+	background-color: #F4E5B1; /*Same color of logo*/
 }
+
+.container{
+	border:2px solid black;
+}
+
 .row{
 	border: 1px solid black;
+	margin: 10px;
 }
 .col-1, .col-2, .col-4{
 	border: 2px dotted black;
 }
 
-.logo-row{
-	height: auto;
-}
-.logo-height{
-}
-
-.insert-password-row{
-	height: 60px;
-}
 .result-test{
 	font-size: 25px;
 	color:black;
 }
-
-
-.body-background{
-	background-color: #F4E5B1;
+.col-centered{
+	height: auto;
+	float:none;
 }
 
-
-.logoImg {
-    height: 100%;
-    width: 100%;
-}
-.logoImg img {
-    height: 100%;
-    width: 100%;
+.box {
+    max-width: 100%;
+    /*TODO: Cómo cambiar la altura en funcion de la altura de la pagina? No me funciona el porcentaje;
 }
