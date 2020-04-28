@@ -1,29 +1,31 @@
 .body-background{
 	background-color: #F4E5B1; /*Same color of logo*/
+	padding-bottom: 0px;
+	padding-top: 0px;
 }
-
 .container{
+	/*
 	border:2px solid black;
+	*/
 }
-
 .row{
 	border: 1px solid black;
-	margin: 10px;
+	margin: 1rem;
 }
-.col-1, .col-2, .col-4{
+.col, .col-1, .col-2, .col-4{
 	border: 2px dotted black;
 }
 
 .result-text{
 	font-size: 25px;
 	color:black;
+	padding-top: 1rem;
 }
+
 .col-centered{
-	height: auto;
-	float:none;
-} /*TODO: No funciona. No me centra verticalmente el input group*/
+	padding-top: 1rem;
+}
 
 .box {
     max-width: 100%;
-    /*TODO: Cómo cambiar la altura en funcion de la altura de la pagina? No me funciona el porcentaje;
 }

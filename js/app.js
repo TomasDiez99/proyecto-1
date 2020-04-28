@@ -1,8 +1,27 @@
 //Global Variables
 var minLength = 6;
+var passwordField = "password-field";
+//Onload page
+window.onload = function() {
+    onloadPage();
+};
+function onloadPage(){
+    console.log("Loaded page");
+}
+
+//Enter key handler for testPassword
+document.getElementById(passwordField).addEventListener('keyup', testPasswordHandler);
+
+function testPasswordHandler(){
+    print("Enter apretado")
+    if (testPasswordHandler.code === "Enter") 
+        testPassword();
+  }
+
+  
 
 function testPassword(){
-    var password = document.getElementById("password-field").value;
+    var password = document.getElementById(passwordField).value;
     var passwordProperties = [hasMinLength(password),
                             hasNumber(password),
                             hasLetter(password),
@@ -11,23 +30,36 @@ function testPassword(){
                            hasLowerCase(password)];
 
     var passStrength = computeStrength(passwordProperties);
-    document.getElementById("result-test").innerHTML = passStrength;
-    console.clear();
-    passwordProperties.forEach(element => {
-        console.log(element);
-    });
+    showStrength(passStrength);
 }
 
 function computeStrength(passwordProperties){
     var strength = 0;
-    passwordProperties.forEach(element => {
-        if (element){
+    var i = 0;
+    while (i<passwordProperties.length){
+        if (passwordProperties[i]){
             strength++;
         }
-    });
+        i++;
+    }
     strength = (strength / passwordProperties.length).toFixed(2); //round number;
     return strength*100;
 }
+function showStrength(passStrength){
+    document.getElementById("result-test").innerHTML = passStrength;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 function hasMinLength(password){
     if (password.length > minLength){
@@ -39,7 +71,7 @@ function hasMinLength(password){
 }
 
 function hasSymbols(password){
-    var regExpr = /[\W\S]/; //Not a english letter or a digit (\S) or a white space
+    var regExpr = /[\W\S]/; //Not a english letter or a digit (\S) or a white space Regular expression
     if (regExpr.test(password)){
         return true;
     }
