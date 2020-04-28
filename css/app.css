@@ -30,6 +30,7 @@
 
 .col-centered{
 	padding-top: 1rem;
+	padding-bottom: 1rem;
 }
 
 .box {
@@ -44,6 +45,28 @@
 	padding: 0.75rem;
 }
 
-table.table-bordered > thead > tr > th{ /*For custom inner borders */
-  border: 9px solid #2B7586;
+
+
+
+/*Bootstrap alerts styling*/
+#pageMessages {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  width: 30%;
+}
+
+.alert {
+  position: relative;
+}
+
+.alert .close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 1em;
+}
+
+.alert .fa {
+  margin-right:.3em;
 }

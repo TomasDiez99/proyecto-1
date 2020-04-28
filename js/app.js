@@ -1,11 +1,7 @@
-//=======================================================================================================//
 //Global Variables
-//=======================================================================================================//
 var minLength = 6;
 var passwordField = "password-field";
 var testButton = "test-button";
-var initializedResultTable = false;
-var initializedHistoryTable = false;
 var passwordProperties = [
     hasMinLength,
     hasNumber,
@@ -15,15 +11,17 @@ var passwordProperties = [
     hasLowerCase
 ]
 
+var initializedResultTable = false;
 var resultTableId = "result-table";
 var resultTableHeaderDesc = "Propierties of your password";
 var resultTableBodyDesc = ["Min Length","Has Numbers","Has Letters","Has Symbols","Upper Case","Lower Case"];
 var resultTableParentId ="result-table-col";
 
 
-var pastPasswordsCount = 5;
+var initializedHistoryTable = false;
+var maxPastPasswordsCount = 5;
 var historyTableId = "history-table";
-var historyTableHeaderDesc = "Last "+pastPasswordsCount+" passwords";
+var historyTableHeaderDesc = "Last "+maxPastPasswordsCount+" passwords";
 var historyTableParentId ="history-table-col";
 var pastPasswords = [];
 
@@ -49,18 +47,23 @@ class PairDescValue{
 
 function testPassword(){
     var password = document.getElementById(passwordField).value;
-    var passwordValues = [];
-    //This calls on every passwordProperties function and stores its result on passwordValues
-    for (i = 0; i<passwordProperties.length;i++){
-        passwordValues.push(passwordProperties[i].apply(null,[password]));
+    if (0==password.localeCompare("")){
+        createAlert("Opps!","Try again","Looks like you didn't insert a password",'warning',true,true,"alert-zone");
+    }else{
+        document.getElementById(passwordField).value = ""; //Clears the input field
+        var passwordResults = [];
+        //This calls on every passwordProperties function and stores its result on passwordValues
+        for (i = 0; i<passwordProperties.length;i++){
+            passwordResults.push(passwordProperties[i].apply(null,[password]));
+        }     
+        var passStrength = computeStrength(passwordResults);
+        showStrength(passStrength);
+
+        var resultTablePairs = buildPairs(resultTableBodyDesc, passwordResults, passwordResults.length);
+        updateTables(password, resultTablePairs, passStrength);
     }
 
     
-    var passStrength = computeStrength(passwordValues);
-    showStrength(passStrength);
-
-    var resultTablePairs = buildPairs(resultTableBodyDesc, passwordValues, passwordValues.length);
-    updateTables(password, resultTablePairs, passStrength);
 }
 
 //Builds an array of Pairs with size beeing size parameter
@@ -72,32 +75,11 @@ function buildPairs(descs, vals, size){
     return pairs;
 }
 
-//This function shift an array of pairs to the right in one index and puts element at the start of the array
-function updatePastPasswords(password,passStrength){
-    var newPastPasswordPair = new PairDescValue(password,passStrength);
-    console.log("desc nuevo "+newPastPasswordPair.desc,"value nuevo "+newPastPasswordPair.val);
-    
-    var deletedPair = pastPasswords.shift(); //deletes the first element of the array
-
-    
-    window.localStorage.removeItem(deletedPair.des)
-
-
-    pastPasswords.push(newPastPasswordPair);
-
-
-    
-    for ( i = 0; i<pastPasswords.length;i++){
-        console.log("desc "+pastPasswords[i].desc, "st "+pastPasswords[i].val);
-    }
-}
-
-
-//=======================================================================================================//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //Tables Initialization and update
-//=======================================================================================================//
-
-
 function updateTables(password, resultTablePairs, passStrength){
     updateResultTable(resultTablePairs);
     updateHistoryTable(password,passStrength);
@@ -110,6 +92,7 @@ function updateResultTable(resultTablePairs){
     }
     updateResultTableAux(resultTableId, resultTablePairs);
 }
+
 function updateResultTableAux(tableId,resultTablePairs){
     for (i=0;i<resultTablePairs.length;i++){
         var cell = document.getElementById(tableId+"row"+i+"cell1"); //Value cell format id
@@ -147,8 +130,6 @@ function initializeTable(parentId,tableId,tableHeaderDesc,tablePairs){
         cellVal.innerHTML = tablePairs[i].val;
         cellVal.id = row.id+"cell1";
     }
-
-    
 }
 
 //This is called for the first time per reload when the user clicks the "History button"
@@ -160,21 +141,16 @@ function toggleHistoryTable(){
     else{
         deleteTable(historyTableId);
     }
-    
     initializedHistoryTable = !initializedHistoryTable;
 }
 
 function deleteTable(tableId){
     var table = document.getElementById(tableId);
     table.parentNode.removeChild(table);
-
 }
 
 function updateHistoryTable(password,passStrength){
-
     updatePastPasswords(password,passStrength);
-
-
     if (initializedHistoryTable){
         updateHistoryTableAux();
     }
@@ -189,40 +165,21 @@ function updateHistoryTableAux(){
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//=======================================================================================================//
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //Password properties computation
-//=======================================================================================================//
-function computeStrength(passwordProperties){
+function computeStrength(passwordValues){
     var strength = 0;
     var i = 0;
-    while (i<passwordProperties.length){
-        if (passwordProperties[i]){
+    while (i<passwordValues.length){
+        if (passwordValues[i]){
             strength++;
         }
         i++;
     }
-    strength = (strength / passwordProperties.length).toFixed(2); //round number;
+    strength = (strength / passwordValues.length).toFixed(2); //round number;
     return strength*100;
 }
 function showStrength(passStrength){
@@ -289,6 +246,12 @@ function hasLowerCase(password){
     }
 }
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//User interface related functions
+
 //Onload page
 window.onload = function() {
     onloadPage();
@@ -296,11 +259,17 @@ window.onload = function() {
 function onloadPage(){
     initializedResultTable = false;
     initializedHistoryTable = false;
-        //MOCK
+
+    pastPasswords = window.localStorage.getItem(JSON.stringify(pastPasswords)); //Get the last pastPasswords array stored in browser
+    if(pastPasswords == null){ //This means is the first time the user operates with the page
         var mockpass = ["PASS1","PASS2","PASS3","PASS4","PASS5"];
         var pastPasswordsStrengths = ["N1","N2","N3","N4","N5"];
-    pastPasswords = buildPairs(mockpass,pastPasswordsStrengths,pastPasswordsCount);
-    
+        pastPasswords = buildPairs(mockpass,pastPasswordsStrengths,maxPastPasswordsCount);
+        window.localStorage.setItem(JSON.stringify(pastPasswords),pastPasswords); //Stores the mock array if its the first time
+        console.log("Mock array created");
+    }
+
+
     console.log("Loaded page");
 }
 //Enter key handler for testPassword
@@ -309,3 +278,128 @@ document.getElementById(passwordField).addEventListener("keyup", event => {
     document.getElementById(testButton).click();
     event.preventDefault();
 });
+
+//reutilized code from https://codepen.io/codysechelski/pen/dYVwjb
+function createAlert(title, summary, details, severity, dismissible, autoDismiss, appendToId) {
+    var iconMap = {
+      info: "fa fa-info-circle",
+      success: "fa fa-thumbs-up",
+      warning: "fa fa-exclamation-triangle",
+      danger: "fa ffa fa-exclamation-circle"
+    };
+  
+    var iconAdded = false;
+  
+    var alertClasses = ["alert", "animated", "flipInX"];
+    alertClasses.push("alert-" + severity.toLowerCase());
+  
+    if (dismissible) {
+      alertClasses.push("alert-dismissible");
+    }
+  
+    var msgIcon = $("<i />", {
+      "class": iconMap[severity] // you need to quote "class" since it's a reserved keyword
+    });
+  
+    var msg = $("<div />", {
+      "class": alertClasses.join(" ") // you need to quote "class" since it's a reserved keyword
+    });
+  
+    if (title) {
+      var msgTitle = $("<h4 />", {
+        html: title
+      }).appendTo(msg);
+      
+      if(!iconAdded){
+        msgTitle.prepend(msgIcon);
+        iconAdded = true;
+      }
+    }
+  
+    if (summary) {
+      var msgSummary = $("<strong />", {
+        html: summary
+      }).appendTo(msg);
+      
+      if(!iconAdded){
+        msgSummary.prepend(msgIcon);
+        iconAdded = true;
+      }
+    }
+  
+    if (details) {
+      var msgDetails = $("<p />", {
+        html: details
+      }).appendTo(msg);
+      
+      if(!iconAdded){
+        msgDetails.prepend(msgIcon);
+        iconAdded = true;
+      }
+    }
+    
+  
+    if (dismissible) {
+      var msgClose = $("<span />", {
+        "class": "close", // you need to quote "class" since it's a reserved keyword
+        "data-dismiss": "alert",
+        html: "<i class='fa fa-times-circle'></i>"
+      }).appendTo(msg);
+    }
+    
+    $('#' + appendToId).prepend(msg);
+    
+    if(autoDismiss){
+      setTimeout(function(){
+        msg.addClass("flipOutX");
+        setTimeout(function(){
+          msg.remove();
+        },1000);
+      }, 5000);
+    }
+  }
+  
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//Storage management functions
+
+//This function deletes the first pastPassword if the array exceeds the maximun count and puts element at the start of the array
+function updatePastPasswords(password,passStrength){
+    window.localStorage.removeItem(JSON.stringify(pastPasswords)); //Deletes the stored array entry because we want to update it
+    var newPastPasswordPair = new PairDescValue(password,passStrength);
+    console.log("desc nuevo "+newPastPasswordPair.desc,"value nuevo "+newPastPasswordPair.val);
+    if (pastPasswords.length > maxPastPasswordsCount){
+        console.log("checkpoint overflow pastpasswords");
+        var deletedPair = pastPasswords.shift(); //deletes the first element of the array
+    }
+    pastPasswords.push(newPastPasswordPair);
+    window.localStorage.setItem(JSON.stringify(pastPasswords),pastPasswords); //Stores the pastPassword array in the browser
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
