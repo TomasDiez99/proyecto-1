@@ -20,7 +20,7 @@
   	<div class="body-background">
 	  	<div class="container-fluid"> <!--Header container row-->
 	  		<div class="row justify-content-center"> 
-	  			<div class="col-4">
+	  			<div class="col-12 col-lg-4 col-xl-4 col-centered">
 	  				<div class="box">
 	  					<img class="img-fluid" src="https://raw.githubusercontent.com/TomasDiez99/proyecto-1/master/assets/logo.png" />
 	  				</div>
@@ -29,8 +29,8 @@
 	  	</div>
 
 
-  		<div class="container-fluid"> <!--Password-->
-	  		<div class="row justify-content-center"> <!--Input and result row-->
+  		<div class="container-fluid"> <!--Password and result container-->
+	  		<div class="row justify-content-center">
 	  			<div class="col-4 col-centered"><!--Input column-->
 	  				<div class="input-group mb-3"><!-- Insert password -->
 	  					<input type="text" class="form-control" placeholder="Insert password to test" aria-label="Password" aria-describedby="Insert password here" id="password-field">
@@ -40,7 +40,7 @@
 					</div>
 	  			</div>
 	  			<div class="col-1 offset-1"> <!--Result column-->
-	  					<div class="text-center result-text" id="result-test">
+	  					<div class="text-center display-4 result-text" id="result-test">
 	  						Result
 	  					</div>
 	  			</div>
@@ -49,30 +49,22 @@
 
 
 	  		<div class="row justify-content-around"> <!-- Result table and history table row-->
-	  			<div class="col-4"> <!--Result table column-->
-	  				<div class="text-center">
-	  					Result table
-	  				</div>
-	  			</div>
-	  			<div class="col-4"> <!--History table column-->
-	  				<div class="text-center">
-	  					History table
-	  				</div>
-	  			</div>
+	  			<div class="col-5" id ="result-table-col"> <!--Result table column--> </div>
+	  			<div class="col-5" id = "history-table-col"> <!--History table column--> </div>
 	  		</div>
 
 
 
 	  		<div class="row justify-content-end align-items-center"> <!--History and contact buttons row-->
 	  			<div class="col-1"> <!--History column-->
-					<div class="text-center">
+					<div class="btn btn-outline-dark" onclick="toggleHistoryTable()">
 						History
 					</div>
 	  			</div>
 
 	  			<div class="col-1"> <!--Contact column-->
 					<div class="text-center">
-						<a href="https://github.com/TomasDiez99">Contact</a>
+						<a href="https://github.com/TomasDiez99"><strong><u>Contact</u></strong></a>
 					</div>
 	  			</div>
 	  		</div>

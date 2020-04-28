@@ -1,25 +1,31 @@
+/* #2B7586 foreground color*/
+/* #F4E5B1 background color*/
+
 .body-background{
-	background-color: #F4E5B1; /*Same color of logo*/
+	background-color: #F4E5B1;
 	padding-bottom: 0px;
 	padding-top: 0px;
 }
-.container{
-	/*
-	border:2px solid black;
-	*/
+
+/*Custom btn colors*/
+.btn-outline-secondary{
+    background-color: #2B7586 !important;
+    color:#F4E5B1 !important;
 }
+
 .row{
-	border: 1px solid black;
 	margin: 1rem;
 }
-.col, .col-1, .col-2, .col-4{
-	border: 2px dotted black;
+
+/* DEBUGGING PURPOSE */
+.col, .col-1, .col-2, .col-4, .col-12{
+	/*border: 2px dotted black;*/
 }
+
 
 .result-text{
 	font-size: 25px;
 	color:black;
-	padding-top: 1rem;
 }
 
 .col-centered{
@@ -28,4 +34,16 @@
 
 .box {
     max-width: 100%;
+}
+
+.custom-table{
+	border-collapse: collapse;
+	border: 3px solid #2B7586 !important;
+	color:#2B7586 !important;
+
+	padding: 0.75rem;
+}
+
+table.table-bordered > thead > tr > th{ /*For custom inner borders */
+  border: 9px solid #2B7586;
 }
