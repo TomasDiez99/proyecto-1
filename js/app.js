@@ -1,6 +1,7 @@
 //Global Variables
 var minLength = 6;
 var passwordField = "password-field";
+var testButton = "test-button";
 //Onload page
 window.onload = function() {
     onloadPage();
@@ -10,15 +11,12 @@ function onloadPage(){
 }
 
 //Enter key handler for testPassword
-document.getElementById(passwordField).addEventListener('keyup', testPasswordHandler);
+document.addEventListener("keyup", event => {
+    if(event.key !== "Enter") return;
+    document.getElementById(testButton).click();
+    event.preventDefault();
+});
 
-function testPasswordHandler(){
-    print("Enter apretado")
-    if (testPasswordHandler.code === "Enter") 
-        testPassword();
-  }
-
-  
 
 function testPassword(){
     var password = document.getElementById(passwordField).value;
