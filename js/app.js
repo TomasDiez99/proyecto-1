@@ -1,3 +1,4 @@
+
 //Global Variables
 var minLength = 6;
 var passwordField = "password-field";
@@ -25,10 +26,24 @@ var historyTableHeaderDesc = "Last "+maxPastPasswordsCount+" passwords";
 var historyTableParentId ="history-table-col";
 var pastPasswords = [];
 
-class PairDescValue{
+
+const passwordsKey = "passwordsKey"; // >:( usa const
+var modeKey = "modeKey";
+
+
+class PairDescValue {
+
     constructor(desc,val){
         this._desc = desc;
         this._val = val;
+    }
+    toJson(){
+        return {
+            _desc : this._desc,
+            _val : this._val,
+            desc : this.desc,
+            val : this.val,
+        }
     }
     get desc(){
         return this._desc;
@@ -48,7 +63,7 @@ class PairDescValue{
 function testPassword(){
     var password = document.getElementById(passwordField).value;
     if (0==password.localeCompare("")){
-        createAlert("Opps!","Try again","Looks like you didn't insert a password",'warning',true,true,"alert-zone");
+        createAlert("Oops!","Try again","Looks like you didn't insert a password",'warning',true,true,"alert-zone");
     }else{
         document.getElementById(passwordField).value = ""; //Clears the input field
         var passwordResults = [];
@@ -69,7 +84,7 @@ function testPassword(){
 //Builds an array of Pairs with size beeing size parameter
 function buildPairs(descs, vals, size){
     var pairs = [];
-    for (i = 0; i<size;i++){
+    for (let i = 0; i<size;i++){
         pairs.push(new PairDescValue(descs[i],vals[i]));
     }
     return pairs;
@@ -196,7 +211,7 @@ function hasMinLength(password){
 }
 
 function hasSymbols(password){
-    var regExpr = /[\W\S]/; //Not a english letter or a digit (\S) or a white space Regular expression
+    var regExpr =/[$-/:-?{-~!"^_`\[\]]/; //Not a english letter or a digit (\S) or a white space Regular expression
     if (regExpr.test(password)){
         return true;
     }
@@ -260,15 +275,7 @@ function onloadPage(){
     initializedResultTable = false;
     initializedHistoryTable = false;
 
-    pastPasswords = window.localStorage.getItem(JSON.stringify(pastPasswords)); //Get the last pastPasswords array stored in browser
-    if(pastPasswords == null){ //This means is the first time the user operates with the page
-        var mockpass = ["PASS1","PASS2","PASS3","PASS4","PASS5"];
-        var pastPasswordsStrengths = ["N1","N2","N3","N4","N5"];
-        pastPasswords = buildPairs(mockpass,pastPasswordsStrengths,maxPastPasswordsCount);
-        window.localStorage.setItem(JSON.stringify(pastPasswords),pastPasswords); //Stores the mock array if its the first time
-        console.log("Mock array created");
-    }
-
+    loadPastPasswords();
 
     console.log("Loaded page");
 }
@@ -278,6 +285,8 @@ document.getElementById(passwordField).addEventListener("keyup", event => {
     document.getElementById(testButton).click();
     event.preventDefault();
 });
+
+
 
 //reutilized code from https://codepen.io/codysechelski/pen/dYVwjb
 function createAlert(title, summary, details, severity, dismissible, autoDismiss, appendToId) {
@@ -369,15 +378,41 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
 
 //This function deletes the first pastPassword if the array exceeds the maximun count and puts element at the start of the array
 function updatePastPasswords(password,passStrength){
-    window.localStorage.removeItem(JSON.stringify(pastPasswords)); //Deletes the stored array entry because we want to update it
+    //window.localStorage.removeItem(passwordsKey); //Deletes the stored array entry because we want to update it
     var newPastPasswordPair = new PairDescValue(password,passStrength);
-    console.log("desc nuevo "+newPastPasswordPair.desc,"value nuevo "+newPastPasswordPair.val);
-    if (pastPasswords.length > maxPastPasswordsCount){
-        console.log("checkpoint overflow pastpasswords");
-        var deletedPair = pastPasswords.shift(); //deletes the first element of the array
+    console.log("desc nuevo "+newPastPasswordPair.desc," value nuevo "+newPastPasswordPair.val);
+    if (pastPasswords.length >= maxPastPasswordsCount){
+        pastPasswords.shift(); //deletes the first element of the array
     }
     pastPasswords.push(newPastPasswordPair);
-    window.localStorage.setItem(JSON.stringify(pastPasswords),pastPasswords); //Stores the pastPassword array in the browser
+    window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords)); //Stores the pastPassword array in the browser
+    console.log("AFTER UPDATING "+window.localStorage.getItem(passwordsKey));
+}
+
+//DEBUGGING PURPOSE
+document.addEventListener("keyup", eventt => {
+    if(eventt.key !== "ArrowDown") return;
+    printPastPasswords();
+    eventt.preventDefault();
+});
+
+
+
+
+function printPastPasswords(){
+    console.log("LOCALSTORAGE");
+    var toPrintCode = window.localStorage.getItem(passwordsKey);
+    console.log(toPrintCode+"");
+    var toPrint = JSON.parse(toPrintCode);
+
+    console.log(toPrint[0]);
+
+
+    console.log("ASD");
+    console.log(toPrint);
+    for (i = 0; i<toPrint.length;i++){
+        console.log(i+") Desc "+toPrint[i]._desc+", Val "+toPrint[i]._val);
+    }
 }
 
 
@@ -385,6 +420,55 @@ function updatePastPasswords(password,passStrength){
 
 
 
+
+
+document.addEventListener("keyup", eventt => {
+    if(eventt.key !== "ArrowLeft") return;
+    printPastPasswordsAux();
+    eventt.preventDefault();
+});
+function printPastPasswordsAux(){
+    console.log("VARIABLE");
+    for (i = 0; i<pastPasswords.length;i++){
+        console.log(i+" Desc "+pastPasswords[i].desc+"Val "+pastPasswords[i].val);
+    }
+}
+//CLEAR LOCALSTORAGE
+document.addEventListener("keyup", eventt => {
+    if(eventt.key !== "ArrowUp") return;
+    window.localStorage.clear();
+    console.log("localStorage cleared");
+    eventt.preventDefault();
+});
+
+
+function loadPastPasswords(){
+    console.log("check1");
+    
+    var pastPasswordsCode = window.localStorage.getItem(passwordsKey); //Get the last pastPasswords array stored in browser
+    console.log("onloadpage pastPasswordsCode "+pastPasswordsCode);
+    pastPasswords = JSON.parse(pastPasswordsCode); //Parse the string to get the actual pastPasswords array
+
+    if(pastPasswords == null){ //This means is the first time the user operates with the page
+        var mockPass = ["-","-","-","-","-"];
+        var mockPastPasswordsStrengths = ["-","-","-","-","-"];
+        pastPasswords = buildPairs(mockPass,mockPastPasswordsStrengths,maxPastPasswordsCount);
+        window.localStorage.setItem(passwordsKey,JSON.stringify(pastPasswords)); //Stores the mock array if its the first time
+        console.log("Mock array created");
+    
+    console.log("LOCALSTORAGE AFTER ONLOAD "+window.localStorage.getItem(passwordsKey));
+    }
+    else{        
+        for (let i = 0; i < pastPasswords.length; i++) // transform raw json to PairDescValue object (to use getters)
+        {
+            pastPasswords[i] = new PairDescValue(pastPasswords[i]._desc,pastPasswords[i]._val);
+        }
+    }
+
+    console.log(pastPasswords.length+" LENGTH "+pastPasswords[0].desc);
+
+    console.log("check2");
+}
 
 
 
