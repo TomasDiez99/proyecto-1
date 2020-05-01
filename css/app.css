@@ -3,8 +3,7 @@
 
 .body-background{
 	background-color: #F4E5B1;
-	padding-bottom: 0.1%;
-	padding-top: 3%;
+	height: auto;
 }
 
 /*Custom btn colors*/
@@ -14,13 +13,13 @@
 }
 
 .row{
-	margin: 1rem;
-}
+	margin: 1%;/*
+	border: 1px solid black;*/
 }
 
 /* DEBUGGING PURPOSE */
-.col, .col-1, .col-2, .col-4, .col-12{
-	/*border: 2px dotted black;*/
+.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{/*
+	border: 2px dotted black;*/
 }
 
 
@@ -30,12 +29,13 @@
 }
 
 .col-centered{
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding-top:1%;
+	padding-bottom: 1%;
 }
 
 .box {
     max-width: 100%;
+    height: auto;
 }
 
 .custom-table{
@@ -46,6 +46,13 @@
 	padding: 0.75rem;
 }
 
+.guide-col{
+	height: 5rem;
+	max-width: 100%;
+	max-height: 100%;
+	margin: auto;
+	padding: 0px;
+}
 
 
 

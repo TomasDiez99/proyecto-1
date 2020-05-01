@@ -18,20 +18,25 @@
   <body>
   	<div class="body-background">
   		<!--Header container-->
-	  	<div class="container-fluid"> 
-	  		<div class="row justify-content-center"> 
-	  			<div class="col-12 col-lg-4 col-xl-4 col-centered">
+	  	<div class="container-fluid">
+	  		<div class="row">
+		  		<div class="col-3 box col-centered" id = "guide-zone">
+		  		</div>
+	  			<div class="col-6">
 	  				<div class="box">
 	  					<img class="img-fluid" src="https://raw.githubusercontent.com/TomasDiez99/proyecto-1/master/assets/logo.png" />
 	  				</div>
 	  			</div>
+				<div class="col-3 box col-centered" id = "alert-zone">
+				</div>
+			
 	  		</div>
 	  	</div>
 
 
 		
   		<div class="container-fluid">
-  			<!--Password, alerts and result container-->
+  			<!--Password and result container-->
 	  		<div class="row justify-content-center">
 	  			<!--Input column-->
 	  			<div class="col-4 col-centered">
@@ -53,11 +58,6 @@
 	  		</div>
 
 
-			<!--Bootstrap alert generation row-->
-			<div class="row justify-content-center">
-		  		<div id = "alert-zone">
-				</div>
-			</div>
 
 
 			<!-- Result table and history table row-->
@@ -69,12 +69,17 @@
 	  		</div>
 
 
-			<!--History button row-->
+			<!--History and clear button row-->
 	  		<div class="row justify-content-end align-items-center">
 	  			<!--History column-->
 	  			<div class="col-1"> 
 					<div class="btn btn-outline-dark" onclick="toggleHistoryTable()">
 						History
+					</div>
+	  			</div>
+	  			<div class="col-1"> 
+					<div class="btn btn-outline-dark" onclick="clearStorage()">
+						Clear Data
 					</div>
 	  			</div>
 	  		</div>
@@ -84,14 +89,18 @@
 	  		<div class="row justify-content-center align-items-center">
 	  			<div class="col-1">
 					<div class="text-center">
-						<a href="https://github.com/TomasDiez99"><strong><u>Contact</u></strong></a>
+						<a href="#" onclick="openContactLink()"><strong><u>Contact</u></strong></a>
 					</div>
 	  			</div>
 	  		</div>
   		</div>
 
 	    <!-- JavaScript -->
+		<script src="js/strengthComputation.js"></script>
 	    <script src="js/app.js"></script>
+	    <script src="js/tables.js"></script>
+	    <script src="js/storage.js"></script>
+	    <script src="js/debuggin.js"></script>
   	</div>
     <!-- Bootstrap import -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

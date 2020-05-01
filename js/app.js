@@ -1,36 +1,38 @@
+"use strict"; //For cleaner code
 
-//Global Variables
-var minLength = 6;
-var passwordField = "password-field";
-var testButton = "test-button";
-var passwordProperties = [
-    hasMinLength,
-    hasNumber,
-    hasLetter,
-    hasSymbols,
-    hasUpperCase,
-    hasLowerCase
-]
+//MUST BE IMPORTED BEFORE STORAGE.JS IN HTML IMPORTS
+
+//Global Variables and classes
+const passwordField = "password-field";
+const testButton = "test-button";
+var passwordProperties = []; 
+const alertZoneId = "alert-zone";
+const guideZoneId = "guide-zone";
+var makeGuideAlert = false;
+var usingAlertSpace = false;
 
 var initializedResultTable = false;
-var resultTableId = "result-table";
-var resultTableHeaderDesc = "Propierties of your password";
-var resultTableBodyDesc = ["Min Length","Has Numbers","Has Letters","Has Symbols","Upper Case","Lower Case"];
-var resultTableParentId ="result-table-col";
+const resultTableId = "result-table";
+const resultTableHeaderDesc = ["Propierties of your password"];
+const resultTableBodyDesc = ["Min Length","Has Numbers","Has Letters","Has Symbols","Upper Case","Lower Case"];
+const resultTableParentId ="result-table-col";
 
 
 var initializedHistoryTable = false;
-var maxPastPasswordsCount = 5;
-var historyTableId = "history-table";
-var historyTableHeaderDesc = "Last "+maxPastPasswordsCount+" passwords";
-var historyTableParentId ="history-table-col";
+const maxPastPasswordsCount = 5;
+const historyTableId = "history-table";
+const historyTableHeaderDesc = ["Last "+maxPastPasswordsCount+" password(s)", "Strength"];
+const historyTableParentId ="history-table-col";
 var pastPasswords = [];
 
 
-const passwordsKey = "passwordsKey"; // >:( usa const
-var modeKey = "modeKey";
+const passwordsKey = "passwordsKey";
+const modeKey = "modeKey";
+const guideAlertKey = "guideAlertKey";
 
-
+/**
+ * Pair class that stores two attributes for flexible usage
+ */
 class PairDescValue {
 
     constructor(desc,val){
@@ -59,16 +61,28 @@ class PairDescValue {
     }
 }
 
+//Builds an array of Pairs with size beeing size parameter
+function buildPairs(descs, vals, size){
+    let pairs = [];
+    for (let i = 0; i<size;i++){
+        pairs.push(new PairDescValue(descs[i],vals[i]));
+    }
+    return pairs;
+}
+
 
 function testPassword(){
     var password = document.getElementById(passwordField).value;
     if (0==password.localeCompare("")){
-        createAlert("Oops!","Try again","Looks like you didn't insert a password",'warning',true,true,"alert-zone");
+        if (!usingAlertSpace){
+            usingAlertSpace = true;
+            createAlert("Oops!","Try again","Looks like you didn't insert a password",'warning',true,true,alertZoneId, usingAlertSpace);
+        }
     }else{
         document.getElementById(passwordField).value = ""; //Clears the input field
         var passwordResults = [];
         //This calls on every passwordProperties function and stores its result on passwordValues
-        for (i = 0; i<passwordProperties.length;i++){
+        for (let i = 0; i<passwordProperties.length;i++){
             passwordResults.push(passwordProperties[i].apply(null,[password]));
         }     
         var passStrength = computeStrength(passwordResults);
@@ -79,186 +93,6 @@ function testPassword(){
     }
 
     
-}
-
-//Builds an array of Pairs with size beeing size parameter
-function buildPairs(descs, vals, size){
-    var pairs = [];
-    for (let i = 0; i<size;i++){
-        pairs.push(new PairDescValue(descs[i],vals[i]));
-    }
-    return pairs;
-}
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//Tables Initialization and update
-function updateTables(password, resultTablePairs, passStrength){
-    updateResultTable(resultTablePairs);
-    updateHistoryTable(password,passStrength);
-}
-
-function updateResultTable(resultTablePairs){
-    if (!initializedResultTable){
-        initializedResultTable = true;
-        initializeTable(resultTableParentId,resultTableId,resultTableHeaderDesc,resultTablePairs);
-    }
-    updateResultTableAux(resultTableId, resultTablePairs);
-}
-
-function updateResultTableAux(tableId,resultTablePairs){
-    for (i=0;i<resultTablePairs.length;i++){
-        var cell = document.getElementById(tableId+"row"+i+"cell1"); //Value cell format id
-        cell.innerHTML = (resultTablePairs[i].val) ? "Yes" : "No";
-    }
-}
-
-function initializeTable(parentId,tableId,tableHeaderDesc,tablePairs){
-    //Creating table
-    var myTable = document.createElement("TABLE");
-    myTable.id = tableId;
-    myTable.className +=" table";
-    myTable.className +=" table-bordered";
-    myTable.className +=" table-hover";
-    myTable.className +=" table-responsive";
-    myTable.className +=" custom-table";
-    document.getElementById(parentId).appendChild(myTable);
-
-    //Creating header
-    var header = myTable.createTHead();
-    var row = header.insertRow(0);
-    var cell = row.insertCell(0);
-    cell.innerHTML = "<strong>"+tableHeaderDesc+"</strong>";
-
-    //Creating body
-    for (i = 0 ; i< tablePairs.length ; i++){
-        var row = myTable.insertRow(-1); //Inserted in the last row index
-        row.id = tableId+"row"+i;
-
-        var cellDesc = row.insertCell(0);
-        cellDesc.id = row.id+"cell0";
-        cellDesc.innerHTML = tablePairs[i].desc;
-
-        var cellVal = row.insertCell(1);
-        cellVal.innerHTML = tablePairs[i].val;
-        cellVal.id = row.id+"cell1";
-    }
-}
-
-//This is called for the first time per reload when the user clicks the "History button"
-function toggleHistoryTable(){
-    if (!initializedHistoryTable){
-        initializeTable(historyTableParentId,historyTableId,historyTableHeaderDesc,pastPasswords);
-
-    }
-    else{
-        deleteTable(historyTableId);
-    }
-    initializedHistoryTable = !initializedHistoryTable;
-}
-
-function deleteTable(tableId){
-    var table = document.getElementById(tableId);
-    table.parentNode.removeChild(table);
-}
-
-function updateHistoryTable(password,passStrength){
-    updatePastPasswords(password,passStrength);
-    if (initializedHistoryTable){
-        updateHistoryTableAux();
-    }
-}
-
-function updateHistoryTableAux(){
-    for (i=0;i<pastPasswords.length;i++){
-        var cellPass = document.getElementById(historyTableId+"row"+i+"cell0"); //Password cell format id
-        cellPass.innerHTML = pastPasswords[i].desc;
-        var cellStrength = document.getElementById(historyTableId+"row"+i+"cell1"); //Strength cell format id
-        cellStrength.innerHTML = pastPasswords[i].val;
-    }
-}
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//Password properties computation
-function computeStrength(passwordValues){
-    var strength = 0;
-    var i = 0;
-    while (i<passwordValues.length){
-        if (passwordValues[i]){
-            strength++;
-        }
-        i++;
-    }
-    strength = (strength / passwordValues.length).toFixed(2); //round number;
-    return strength*100;
-}
-function showStrength(passStrength){
-    document.getElementById("result-test").innerHTML = passStrength;
-}
-
-function hasMinLength(password){
-    if (password.length > minLength){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-function hasSymbols(password){
-    var regExpr =/[$-/:-?{-~!"^_`\[\]]/; //Not a english letter or a digit (\S) or a white space Regular expression
-    if (regExpr.test(password)){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-function hasNumber(password){
-    var regExpr = /\d/ ; //Any digit from 0 to 9 Regular expression
-    if (regExpr.test(password)){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-function hasLetter(password){
-    var regExpr = /[A-Za-z]/; //Any letter from A to Z or from a to z Regular expression
-    if (regExpr.test(password)){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-function hasUpperCase(password){
-    var lowerCasePassword = password.toLowerCase();
-    var res = password.localeCompare(lowerCasePassword);
-    if (res == 0){/*the strings were equals, this mean the password dont have uppercase letters */
-        return false;
-    }
-    else{
-        return true;
-    }
-}
-function hasLowerCase(password){
-    var upperCasePassword = password.toUpperCase();
-    var res = password.localeCompare(upperCasePassword);
-    if (res == 0){/*the strings were equals, this mean the password dont have lowercase letters */
-        return false;
-    }
-    else{
-        return true;
-    }
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -274,7 +108,18 @@ window.onload = function() {
 function onloadPage(){
     initializedResultTable = false;
     initializedHistoryTable = false;
+    usingAlertSpace = false;
+    updateGuideAlert();
 
+
+    passwordProperties = [
+        hasMinLength,
+        hasNumber,
+        hasLetter,
+        hasSymbols,
+        hasUpperCase,
+        hasLowerCase
+    ];
     loadPastPasswords();
 
     console.log("Loaded page");
@@ -286,10 +131,17 @@ document.getElementById(passwordField).addEventListener("keyup", event => {
     event.preventDefault();
 });
 
+//History table key handler
+document.addEventListener("keyup", event => {
+    if(event.key !== "h") return; //H letter keyCode
+    toggleHistoryTable();
+    event.preventDefault();
+});
+
 
 
 //reutilized code from https://codepen.io/codysechelski/pen/dYVwjb
-function createAlert(title, summary, details, severity, dismissible, autoDismiss, appendToId) {
+function createAlert(title, summary, details, severity, dismissible, autoDismiss, appendToId, alertSpace) {
     var iconMap = {
       info: "fa fa-info-circle",
       success: "fa fa-thumbs-up",
@@ -363,127 +215,26 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
         msg.addClass("flipOutX");
         setTimeout(function(){
           msg.remove();
+          if (alertSpace) { usingAlertSpace = false;} //Inserted code to manage alert zone behaviour
         },1000);
       }, 5000);
+      
     }
   }
-  
 
-
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//Storage management functions
-
-//This function deletes the first pastPassword if the array exceeds the maximun count and puts element at the start of the array
-function updatePastPasswords(password,passStrength){
-    //window.localStorage.removeItem(passwordsKey); //Deletes the stored array entry because we want to update it
-    var newPastPasswordPair = new PairDescValue(password,passStrength);
-    console.log("desc nuevo "+newPastPasswordPair.desc," value nuevo "+newPastPasswordPair.val);
-    if (pastPasswords.length >= maxPastPasswordsCount){
-        pastPasswords.shift(); //deletes the first element of the array
-    }
-    pastPasswords.push(newPastPasswordPair);
-    window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords)); //Stores the pastPassword array in the browser
-    console.log("AFTER UPDATING "+window.localStorage.getItem(passwordsKey));
-}
-
-//DEBUGGING PURPOSE
-document.addEventListener("keyup", eventt => {
-    if(eventt.key !== "ArrowDown") return;
-    printPastPasswords();
-    eventt.preventDefault();
-});
-
-
-
-
-function printPastPasswords(){
-    console.log("LOCALSTORAGE");
-    var toPrintCode = window.localStorage.getItem(passwordsKey);
-    console.log(toPrintCode+"");
-    var toPrint = JSON.parse(toPrintCode);
-
-    console.log(toPrint[0]);
-
-
-    console.log("ASD");
-    console.log(toPrint);
-    for (i = 0; i<toPrint.length;i++){
-        console.log(i+") Desc "+toPrint[i]._desc+", Val "+toPrint[i]._val);
-    }
-}
+  function openContactLink(){
+    window.open('https://github.com/TomasDiez99', 'Contact', 'width=800,height=800');
+  }
 
 
 
 
 
 
+/*
 
+  $(guideZoneId).children.on('closed.bs.alert', function () {
+    console.log("DISSMISS CLICKED");
+  })
 
-document.addEventListener("keyup", eventt => {
-    if(eventt.key !== "ArrowLeft") return;
-    printPastPasswordsAux();
-    eventt.preventDefault();
-});
-function printPastPasswordsAux(){
-    console.log("VARIABLE");
-    for (i = 0; i<pastPasswords.length;i++){
-        console.log(i+" Desc "+pastPasswords[i].desc+"Val "+pastPasswords[i].val);
-    }
-}
-//CLEAR LOCALSTORAGE
-document.addEventListener("keyup", eventt => {
-    if(eventt.key !== "ArrowUp") return;
-    window.localStorage.clear();
-    console.log("localStorage cleared");
-    eventt.preventDefault();
-});
-
-
-function loadPastPasswords(){
-    console.log("check1");
-    
-    var pastPasswordsCode = window.localStorage.getItem(passwordsKey); //Get the last pastPasswords array stored in browser
-    console.log("onloadpage pastPasswordsCode "+pastPasswordsCode);
-    pastPasswords = JSON.parse(pastPasswordsCode); //Parse the string to get the actual pastPasswords array
-
-    if(pastPasswords == null){ //This means is the first time the user operates with the page
-        var mockPass = ["-","-","-","-","-"];
-        var mockPastPasswordsStrengths = ["-","-","-","-","-"];
-        pastPasswords = buildPairs(mockPass,mockPastPasswordsStrengths,maxPastPasswordsCount);
-        window.localStorage.setItem(passwordsKey,JSON.stringify(pastPasswords)); //Stores the mock array if its the first time
-        console.log("Mock array created");
-    
-    console.log("LOCALSTORAGE AFTER ONLOAD "+window.localStorage.getItem(passwordsKey));
-    }
-    else{        
-        for (let i = 0; i < pastPasswords.length; i++) // transform raw json to PairDescValue object (to use getters)
-        {
-            pastPasswords[i] = new PairDescValue(pastPasswords[i]._desc,pastPasswords[i]._val);
-        }
-    }
-
-    console.log(pastPasswords.length+" LENGTH "+pastPasswords[0].desc);
-
-    console.log("check2");
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  */
