@@ -1,6 +1,6 @@
 "use strict"; //For cleaner code
 
-//MUST BE IMPORTED BEFORE STORAGE.JS IN HTML IMPORTS
+//MUST BE IMPORTED BEFORE STORAGE.JS IN HTML IMPORT
 
 //Global Variables and classes
 const passwordField = "password-field";
@@ -10,6 +10,8 @@ const alertZoneId = "alert-zone";
 const guideZoneId = "guide-zone";
 var makeGuideAlert = false;
 var usingAlertSpace = false;
+var updatingBar = false;
+
 
 var initializedResultTable = false;
 const resultTableId = "result-table";
@@ -34,18 +36,9 @@ const guideAlertKey = "guideAlertKey";
  * Pair class that stores two attributes for flexible usage
  */
 class PairDescValue {
-
     constructor(desc,val){
         this._desc = desc;
         this._val = val;
-    }
-    toJson(){
-        return {
-            _desc : this._desc,
-            _val : this._val,
-            desc : this.desc,
-            val : this.val,
-        }
     }
     get desc(){
         return this._desc;
@@ -61,39 +54,16 @@ class PairDescValue {
     }
 }
 
-//Builds an array of Pairs with size beeing size parameter
-function buildPairs(descs, vals, size){
+//Builds an array of Pairs with the descs and vals arrays of same size
+function buildPairs(descs, vals){
     let pairs = [];
+    let size = vals.length;
     for (let i = 0; i<size;i++){
         pairs.push(new PairDescValue(descs[i],vals[i]));
     }
     return pairs;
 }
 
-
-function testPassword(){
-    var password = document.getElementById(passwordField).value;
-    if (0==password.localeCompare("")){
-        if (!usingAlertSpace){
-            usingAlertSpace = true;
-            createAlert("Oops!","Try again","Looks like you didn't insert a password",'warning',true,true,alertZoneId, usingAlertSpace);
-        }
-    }else{
-        document.getElementById(passwordField).value = ""; //Clears the input field
-        var passwordResults = [];
-        //This calls on every passwordProperties function and stores its result on passwordValues
-        for (let i = 0; i<passwordProperties.length;i++){
-            passwordResults.push(passwordProperties[i].apply(null,[password]));
-        }     
-        var passStrength = computeStrength(passwordResults);
-        showStrength(passStrength);
-
-        var resultTablePairs = buildPairs(resultTableBodyDesc, passwordResults, passwordResults.length);
-        updateTables(password, resultTablePairs, passStrength);
-    }
-
-    
-}
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,15 +72,12 @@ function testPassword(){
 //User interface related functions
 
 //Onload page
-window.onload = function() {
-    onloadPage();
-};
+window.onload = onloadPage;
 function onloadPage(){
     initializedResultTable = false;
     initializedHistoryTable = false;
     usingAlertSpace = false;
     updateGuideAlert();
-
 
     passwordProperties = [
         hasMinLength,
@@ -120,23 +87,47 @@ function onloadPage(){
         hasUpperCase,
         hasLowerCase
     ];
-    loadPastPasswords();
 
-    console.log("Loaded page");
+    loadPastPasswords();
 }
 //Enter key handler for testPassword
 document.getElementById(passwordField).addEventListener("keyup", event => {
-    if(event.key !== "Enter") return;
+    if(event.key !== "Enter" || updatingBar) return; //Doesnt work while updating the progress bar of the last test
     document.getElementById(testButton).click();
     event.preventDefault();
 });
 
 //History table key handler
 document.addEventListener("keyup", event => {
-    if(event.key !== "h") return; //H letter keyCode
+    if(event.key !== "h" || document.getElementById(passwordField)== document.activeElement) return; 
+    //H letter keyCode. Only works if the password input field is not selected
     toggleHistoryTable();
     event.preventDefault();
 });
+
+
+function testPassword(){
+  let password = document.getElementById(passwordField).value;
+  if (0==password.localeCompare("")){ //If the user enters a empty string as input
+      if (!usingAlertSpace){
+          usingAlertSpace = true;
+          createAlert("Oops!","Try again","Looks like you didn't insert a password",'warning',false,true,alertZoneId, usingAlertSpace);
+      }
+  }else{
+      document.getElementById(passwordField).value = ""; //Clears the input field
+      var passwordResults = [];
+      //This calls on every passwordProperties function and stores its result on passwordValues
+      for (let i = 0; i<passwordProperties.length;i++){
+          passwordResults.push(passwordProperties[i].apply(null,[password]));
+      }     
+
+      let passStrength = computeStrength(passwordResults);
+      showStrength(passStrength);
+
+      let resultTablePairs = buildPairs(resultTableBodyDesc, passwordResults, passwordResults.length);
+      updateTables(password, resultTablePairs, passStrength);
+  }
+}
 
 
 
@@ -225,16 +216,3 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
   function openContactLink(){
     window.open('https://github.com/TomasDiez99', 'Contact', 'width=800,height=800');
   }
-
-
-
-
-
-
-/*
-
-  $(guideZoneId).children.on('closed.bs.alert', function () {
-    console.log("DISSMISS CLICKED");
-  })
-
-  */

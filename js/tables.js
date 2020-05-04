@@ -22,16 +22,15 @@ function updateResultTableAux(tableId,resultTablePairs){
 }
 
 function initializeTable(parentId,tableId,tableHeaderDesc,tablePairs){
-    //Creating table
-    var myTable = document.createElement("TABLE");
+    let myTable = document.createElement("TABLE");
     myTable.id = tableId;
     myTable.className +=" table";
     myTable.className +=" table-bordered";
     myTable.className +=" table-hover";
     myTable.className +=" table-responsive";
     myTable.className +=" custom-table";
+    console.log("Table "+tableId+" with classes property "+myTable.className);
     document.getElementById(parentId).appendChild(myTable);
-
     initializeTableHeader(myTable,tableHeaderDesc);
     initializeTableBody(tableId, myTable,tablePairs);
 }
@@ -46,14 +45,14 @@ function initializeTableHeader(table, tableHeaderDesc){
 }
 function initializeTableBody(tableId, table, tablePairs){
         for (let i = 0 ; i< tablePairs.length ; i++){
-            var row = table.insertRow(-1); //Inserted in the last row index
+            let row = table.insertRow(-1); //Inserted in the last row index
             row.id = tableId+"row"+i;
     
-            var cellDesc = row.insertCell(0);
+            let cellDesc = row.insertCell(0);
             cellDesc.id = row.id+"cell0";
             cellDesc.innerHTML = tablePairs[i].desc;
     
-            var cellVal = row.insertCell(1);
+            let cellVal = row.insertCell(1);
             cellVal.innerHTML = tablePairs[i].val;
             cellVal.id = row.id+"cell1";
         }
@@ -72,7 +71,7 @@ function toggleHistoryTable(){
 }
 
 function deleteTable(tableId){
-    var table = document.getElementById(tableId);
+    let table = document.getElementById(tableId);
     table.parentNode.removeChild(table);
 }
 
@@ -85,10 +84,10 @@ function updateHistoryTable(password,passStrength){
 
 function updateHistoryTableAux(){
     for (let i=0;i<pastPasswords.length;i++){
-        var cellPass = document.getElementById(historyTableId+"row"+i+"cell0"); //Password cell format id
+        let cellPass = document.getElementById(historyTableId+"row"+i+"cell0"); //Password cell format id
         cellPass.innerHTML = pastPasswords[i].desc;
 
-        var cellStrength = document.getElementById(historyTableId+"row"+i+"cell1"); //Strength cell format id
+        let cellStrength = document.getElementById(historyTableId+"row"+i+"cell1"); //Strength cell format id
         cellStrength.innerHTML = pastPasswords[i].val;
     }
 }

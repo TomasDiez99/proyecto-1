@@ -1,36 +1,71 @@
 /* #2B7586 foreground color*/
 /* #F4E5B1 background color*/
-
-.body-background{
+html,
+body {
 	background-color: #F4E5B1;
-	height: auto;
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
 }
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -30px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+	height: 30px;	
+}
+
+#footer {
+    background-color: #F4E5B1;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+#myProgress {
+	width: 100%;
+	background-color: #F4E5B1;
+  }
+  
+  #myBar {
+	width: 100%;
+	height: 30px;
+	line-height: 30px; /* same as height for vertical align*/
+	background-color: #2B7586;
+	text-align: center;
+	color: #F4E5B1;
+  }
 
 /*Custom btn colors*/
 .btn-outline-secondary{
     background-color: #2B7586 !important;
     color:#F4E5B1 !important;
 }
-
+/*
 .row{
-	margin: 1%;/*
-	border: 1px solid black;*/
+	border: 1px solid black;
 }
+.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
+	border: 2px dotted black;
+}*/
 
-/* DEBUGGING PURPOSE */
-.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{/*
-	border: 2px dotted black;*/
-}
-
-
-.result-text{
-	font-size: 25px;
-	color:black;
-}
-
-.col-centered{
-	padding-top:1%;
-	padding-bottom: 1%;
+.centered{
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .box {
@@ -45,16 +80,6 @@
 
 	padding: 0.75rem;
 }
-
-.guide-col{
-	height: 5rem;
-	max-width: 100%;
-	max-height: 100%;
-	margin: auto;
-	padding: 0px;
-}
-
-
 
 /*Bootstrap alerts styling*/
 #pageMessages {

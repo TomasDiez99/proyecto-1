@@ -20,10 +20,10 @@
 
   </head>
   <body>
-  	<div class="body-background">
+  	<div id="wrap">
   		<!--Header container-->
 	  	<div class="container-fluid">
-	  		<div class="row">
+	  		<div class="row align-items-center">
 		  		<div class="col-3 box col-centered" id = "guide-zone">
 		  		</div>
 	  			<div class="col-6">
@@ -31,7 +31,7 @@
 	  					<img class="img-fluid" src="https://raw.githubusercontent.com/TomasDiez99/proyecto-1/master/assets/logo.png" />
 	  				</div>
 	  			</div>
-				<div class="col-3 box col-centered" id = "alert-zone">
+				<div class="col-3 box centered" id = "alert-zone">
 				</div>
 			
 	  		</div>
@@ -41,9 +41,9 @@
 		
   		<div class="container-fluid">
   			<!--Password and result container-->
-	  		<div class="row justify-content-center">
+	  		<div class="row justify-content-center align-items-center">
 	  			<!--Input column-->
-	  			<div class="col-4 col-centered">
+	  			<div class="col-4 centered">
 	  				<div class="input-group mb-3">
 	  					<input type="text" class="form-control" placeholder="Insert password to test" aria-label="Password" aria-describedby="Insert password here" id="password-field">
 	  						<div class="input-group-append">
@@ -52,60 +52,79 @@
 	    						</button>
 	 						</div>
 					</div>
-	  			</div>
-	  			<!--Result column-->
-	  			<div class="col-1 offset-1">
-	  				<div class="text-center display-4 result-text" id="result-test">
-	  					Result
-	  				</div>
-	  			</div>
+				  </div>
 	  		</div>
+				
 
+			<!--Result row-->
+			<div class="row justify-content-center align-items-center">
+			<div class="col">
+				<div class="div" id = "myProgress">
+					<div class="div" id = "myBar"> Strength of your password
+					</div>
+				</div>
+			</div>
+			</div>
 
 
 
 			<!-- Result table and history table row-->
-	  		<div class="row justify-content-around">
+	  		<div class="row justify-content-around align-items-center">
 	  			<!--Result table column-->
-	  			<div class="col-5" id ="result-table-col"></div>
+	  			<div class="col-5" id ="result-table-col">
+					<!----  <canvas width="2px" height="400%">
+					  </canvas> -->
+				  </div>
 	  			<!--History table column--> 
 	  			<div class="col-5" id = "history-table-col"></div>
 	  		</div>
 
+  		</div>
 
+
+		<div id="push"></div></div>
+
+		
+	</div>
+			
+	<div id="footer">
+		<div class="container-fluid">
 			<!--History and clear button row-->
-	  		<div class="row justify-content-end align-items-center">
-	  			<!--History column-->
-	  			<div class="col-1"> 
-					<div class="btn btn-outline-dark" onclick="toggleHistoryTable()">
-						History
-					</div>
-	  			</div>
-	  			<div class="col-1"> 
-					<div class="btn btn-outline-dark" onclick="clearStorage()">
-						Clear Data
-					</div>
-	  			</div>
-	  		</div>
+			<div class="row justify-content-end align-items-center">
+				<!--History column-->
+				<div class="col-1"> 
+				  <div class="btn btn-outline-dark" onclick="toggleHistoryTable()">
+					  History
+				  </div>
+				</div>
+				<div class="col-1"> 
+				  <div class="btn btn-outline-dark" onclick="clearStorage()">
+					  Clear Data
+				  </div>
+				</div>
+			</div>
+
 
 
 			<!--Info row -->
-	  		<div class="row justify-content-center align-items-center">
-	  			<div class="col-1">
+			<div class="row justify-content-center align-items-center">
+				<div class="col-1">
 					<div class="text-center">
 						<a href="#" onclick="openContactLink()"><strong><u>Contact</u></strong></a>
 					</div>
-	  			</div>
-	  		</div>
-  		</div>
-
-	    <!-- JavaScript -->
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<!-- JavaScript -->
 		<script src="js/strengthComputation.js"></script>
 	    <script src="js/app.js"></script>
 	    <script src="js/tables.js"></script>
 	    <script src="js/storage.js"></script>
-	    <script src="js/debuggin.js"></script>
-  	</div>
+		<script src="js/debuggin.js"></script>
     <!-- Bootstrap import -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
