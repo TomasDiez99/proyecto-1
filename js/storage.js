@@ -64,3 +64,30 @@ function clearStorage(){
     }
     
 }
+
+
+function loadMode(){
+    let mode = window.localStorage.getItem("darkSwitch");
+    if (mode==null){ //This means we are in light mode
+        console.log("NO DARK MODE");
+        document.getElementById("logo-container").src = "assets/logo.png";
+    }
+    else{
+        console.log("DARK MODE");
+        document.getElementById("logo-container").src = "assets/secondaryLogo.png";
+    }
+}
+
+function updateMode(){
+    let mode = window.localStorage.getItem("darkSwitch");
+    if (mode==null){ //This means we changed to dark mode
+        console.log("DARK MODE");
+        document.getElementById("logo-container").src = "assets/secondaryLogo.png";
+        document.getElementById("page-icon").href = "assets/secondaryPageIcon.png"; 
+    }
+    else{
+        console.log("NO DARK MODE");
+        document.getElementById("logo-container").src = "assets/logo.png";
+        document.getElementById("page-icon").href = "assets/pageIcon.png";
+    }
+}

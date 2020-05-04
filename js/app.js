@@ -77,6 +77,7 @@ function onloadPage(){
     initializedResultTable = false;
     initializedHistoryTable = false;
     usingAlertSpace = false;
+    loadMode();
     updateGuideAlert();
 
     passwordProperties = [
@@ -107,6 +108,8 @@ document.addEventListener("keyup", event => {
 
 
 function testPassword(){
+  if (updatingBar){return;} //Dont want to analyze passwords while updating passwords
+
   let password = document.getElementById(passwordField).value;
   if (0==password.localeCompare("")){ //If the user enters a empty string as input
       if (!usingAlertSpace){
@@ -128,8 +131,6 @@ function testPassword(){
       updateTables(password, resultTablePairs, passStrength);
   }
 }
-
-
 
 //reutilized code from https://codepen.io/codysechelski/pen/dYVwjb
 function createAlert(title, summary, details, severity, dismissible, autoDismiss, appendToId, alertSpace) {
@@ -213,6 +214,8 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
     }
   }
 
+
+  
   function openContactLink(){
     window.open('https://github.com/TomasDiez99', 'Contact', 'width=800,height=800');
   }
