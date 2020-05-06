@@ -53,6 +53,7 @@ function updateGuideAlert(){
         "- Press H toggle on and off history table","primary",true,false,guideZoneId,false);
     }
 
+
 }
 function clearStorage(){
     if (confirm("Are you sure you want to delete the history?")){
@@ -91,3 +92,4 @@ function updateMode(){
         document.getElementById("page-icon").href = "assets/pageIcon.png";
     }
 }
+

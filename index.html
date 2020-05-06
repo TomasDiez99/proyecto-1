@@ -4,23 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel = "icon" type = "image/x-icon" id="page-icon">
-
-
     <!-- Bootstrap import -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
     <!-- CSS -->
 	<link rel="stylesheet" href="css/app.css">
-
 	<!--Fontawesome icons-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
     <title>SecureNow</title>
-
   </head>
   <body>
-  	<div id="wrap">
+  	<div id="wrap">   
   		<!--Header container-->
 	  	<div class="container-fluid">
 			<div class="row justify-content-end">
@@ -34,21 +27,14 @@
 			</div>
 
 	  		<div class="row align-items-center">
-		  		<div class="col-3 box col-centered" id = "guide-zone">
-		  		</div>
-	  			<div class="col-6">
-	  				<div class="box">
-	  					<img class="img-fluid" id="logo-container"/>
-	  				</div>
+		  		<div class="col-3 box col-centered" id="guide-zone"></div>
+	  			<div class="col-6 box">
+	  				<img class="img-fluid" id="logo-container"/>
 	  			</div>
-				<div class="col-3 box centered" id = "alert-zone">
-				</div>
-			
+				<div class="col-3 box centered" id="alert-zone"></div>
 	  		</div>
 	  	</div>
 
-
-		
   		<div class="container-fluid">
   			<!--Password and result container-->
 	  		<div class="row justify-content-center align-items-center">
@@ -62,71 +48,58 @@
 	    						</button>
 	 						</div>
 					</div>
-				  </div>
-	  		</div>
-				
-
+				</div>
+			</div>
+			  
 			<!--Result row-->
 			<div class="row justify-content-center align-items-center">
-			<div class="col">
-				<div class="div" id = "myProgress">
-					<div class="div bg-light" id = "myBar"> <strong>Strength</strong>
+				<div class="col">
+					<div id = "myProgress">
+						<div class="bg-light" id = "myBar"> <strong>Strength</strong></div>
 					</div>
 				</div>
 			</div>
-			</div>
-
-
 
 			<!-- Result table and history table row-->
 	  		<div class="row justify-content-around align-items-center">
-	  			<!--Result table column-->
-	  			<div class="col-5" id ="result-table-col">
-					<!----  <canvas width="2px" height="400%">
-					  </canvas> -->
-				  </div>
-	  			<!--History table column--> 
+	  			<div class="col-5" id ="result-table-col"></div>
 	  			<div class="col-5" id = "history-table-col"></div>
 	  		</div>
-
   		</div>
 
-
-		<div id="push"></div></div>
-
-		
+		<div id="push"></div></div>		
 	</div>
-			
+
 	<div id="footer">
 		<div class="container-fluid">
 			<!--History and clear button row-->
 			<div class="row justify-content-end align-items-center">
 				<div class="col-1"> 
-				  <div class="btn btn-outline-dark" onclick="toggleHistoryTable()">
-					  History
-				  </div>
+					<div class="btn btn-outline-dark bg-black" onclick="toggleHistoryTable()">
+						History
+					</div>
 				</div>
 				<div class="col-1"> 
-				  <div class="btn btn-outline-dark" onclick="clearStorage()">
-					  Clear Data
-				  </div>
+					<div class="btn btn-outline-danger" onclick="clearStorage()">
+						Clear Data
+					</div>
 				</div>
 			</div>
-
-
 
 			<!--Info row -->
 			<div class="row justify-content-center align-items-center">
 				<div class="col-1">
-					<div class="text-center">
-						<a href="#" onclick="openContactLink()"><strong><u>Contact</u></strong></a>
-					</div>
+					<i class="fa fa-font-awesome" aria-hidden="true" onclick="openFaLink()"></i>
+				</div>
+				<div class="col-1">
+					<i class="fa fa-github" aria-hidden="true" onclick="openContactLink()"></i>
+				</div>
+				<div class="col-1">
+					<i class="fa fa-university" aria-hidden="true" onclick="openUNSLink()"></i>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
 	
 	<!-- JavaScript -->
 		<script src="js/strengthComputation.js"></script>

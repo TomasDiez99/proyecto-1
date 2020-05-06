@@ -29,7 +29,6 @@ var pastPasswords = [];
 
 
 const passwordsKey = "passwordsKey";
-const modeKey = "modeKey";
 const guideAlertKey = "guideAlertKey";
 
 /**
@@ -196,8 +195,10 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
       var msgClose = $("<span />", {
         "class": "close", // you need to quote "class" since it's a reserved keyword
         "data-dismiss": "alert",
+        "onclick":"closeAlert("+usingAlertSpace+")", //Inserted code by me to manage guide alert behaviour
         html: "<i class='fa fa-times-circle'></i>"
       }).appendTo(msg);
+
     }
     
     $('#' + appendToId).prepend(msg);
@@ -210,12 +211,25 @@ function createAlert(title, summary, details, severity, dismissible, autoDismiss
           if (alertSpace) { usingAlertSpace = false;} //Inserted code to manage alert zone behaviour
         },1000);
       }, 5000);
-      
     }
   }
 
+  function closeAlert(usingAlertSpace){
+    console.log("CLOSED ALERT");
+    if (!usingAlertSpace) { //Means we're closing the guide alert
+        window.localStorage.setItem(guideAlertKey,JSON.stringify(usingAlertSpace));
+    }
+}
 
   
   function openContactLink(){
     window.open('https://github.com/TomasDiez99', 'Contact', 'width=800,height=800');
+  }
+
+  function openFaLink(){
+    window.open('https://fontawesome.com/', 'Fontawesome', 'width=800,height=800');
+  }
+
+  function openUNSLink(){
+    window.open('https://cs.uns.edu.ar/home/', 'Universidad Nacional del Sur', 'width=800,height=800');
   }

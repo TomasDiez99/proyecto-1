@@ -9,9 +9,8 @@
 	--secondaryColorDark: #2F272F;
 }
 
-html,
-body {
-	background-color: var(--secondaryColor);
+html, body{
+	background-color: var(--secondaryColorDark) !important;
   color: var(--primaryColor);
   transition: 0.2s ease all;
     height: 100%;
@@ -19,23 +18,19 @@ body {
 }
 
 /* Wrapper for page content to push down footer */
-#wrap {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    /* Negative indent footer by it's height */
-    margin: 0 auto -30px;
+#wrap{
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -100px;
 }
 
 /* Set the fixed height of the footer here */
-#push,
-#footer {
-	height: 30px;	
+#push, #footer {
+  height: 100px;
 }
 
-#footer {
-	background-color: var(--secondaryColor);
-}
 
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
@@ -47,47 +42,40 @@ body {
     }
 }
 
-[data-theme="dark"] {
+[data-theme="dark"]{
 	background-color: var(--secondaryColorDark) !important;
 	color: var(--primaryColorDark) !important;
-  }
+}
 
-[data-theme="dark"] .body{
+[data-theme="dark"] html, [data-theme="dark"] body{
   background-color: var(--secondaryColorDark) !important;
   color: var(--primaryColorDark) !important;
   height: 100%;
 }
 
-[data-theme="dark"] .html{
-  background-color: var(--secondaryColorDark) !important;
-  color: var(--primaryColorDark) !important;
-  height: 100%;
-}
-
-  [data-theme="dark"] .bg-light {
+[data-theme="dark"] .bg-light{
 	background-color:var(--primaryColorDark) !important;
 	color: var(--secondaryColorDark) !important;
-  }
+}
   
-  [data-theme="dark"] .bg-white {
+[data-theme="dark"] .bg-white{
 	background-color:var(--secondaryColorDark) !important;
-  }
+}
   
-  [data-theme="dark"] .bg-black {
+[data-theme="dark"] .bg-black{
 	background-color: var(--primaryColorDark) !important;
-  }
-  [data-theme="dark"] .btn-outline-secondary{
+}
+[data-theme="dark"] .btn-outline-secondary{
     background-color: var(--primaryColorDark) !important;
     color:var(--secondaryColorDark) !important;
-  }
-  [data-theme="dark"] #footer, #push{
-	  background-color: var(--secondaryColorDark) !important;
+}
+[data-theme="dark"] #footer, #push{
 	  color: var(--primaryColorDark) !important;
-  }
-  [data-theme="dark"] .custom-table{
+}
+[data-theme="dark"] .custom-table{
     border: 3px solid var(--primaryColorDark) !important;
     color:var(--primaryColorDark) !important;
-  }
+}
 
 .bg-light{
 	color: var(--secondaryColor) !important;
@@ -95,32 +83,32 @@ body {
 }
 /*Custom btn colors*/
 .btn-outline-secondary{
-    background-color: var(--primaryColor) !important;
-    color:var(--secondaryColor) !important;
+  background-color: var(--primaryColor) !important;
+  color:var(--secondaryColor) !important;
 }
 
 #myProgress {
 	width: 100%;
-  }
-  #myBar {
+}
+#myBar {
 	width: 100%;
 	height: 30px;
 	line-height: 30px; /* same as height for vertical align*/
 	text-align: center;
-  }
-
+}
+/*
 .row{
 	border: 1px solid gray;
 }
 
 .col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
 	border: 2px dotted gray;
-}
-
+}*/
+/*
 .centered{
 	padding-left: 10px;
 	padding-right: 10px;
-}
+}*/
 
 .box {
     max-width: 100%;
