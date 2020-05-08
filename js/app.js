@@ -5,13 +5,29 @@
 //Global Variables and classes
 const passwordField = "password-field";
 const testButton = "test-button";
-var passwordProperties = [];
+const passwordProperties = [
+	hasMinLength,
+	hasNumber,
+	hasLetter,
+	hasSymbols,
+	hasUpperCase,
+	hasLowerCase,
+];
 const alertZoneId = "alert-zone";
 const guideZoneId = "guide-zone";
 var makeGuideAlert = false;
 var usingAlertSpace = false;
 var updatingBar = false;
+const barId = "myBar";
 const strengthDisplayId = "strength-display";
+
+const helpModalId = "myModal";
+const helpModalBodyId = "modal-body";
+const helpModalTips = [
+	"Press H to toggle on/off the history table",
+	"You can always delete the history by clicking the 'Clear Data' button",
+	"Try the dark mode by clicking the switch at the upper right corner!",
+];
 
 var initializedResultTable = false;
 const resultTableId = "result-table";
@@ -84,16 +100,9 @@ function onloadPage() {
 	initializedHistoryTable = false;
 	usingAlertSpace = false;
 	loadMode();
+	initializeHelpModal();
 	updateGuideAlert();
 
-	passwordProperties = [
-		hasMinLength,
-		hasNumber,
-		hasLetter,
-		hasSymbols,
-		hasUpperCase,
-		hasLowerCase,
-	];
 	loadPastPasswords();
 }
 //Enter key handler for testPassword
@@ -249,11 +258,38 @@ function createAlert(
 }
 
 function closeAlert(usingAlertSpace) {
-	console.log("CLOSED ALERT");
 	if (!usingAlertSpace) {
 		//Means we're closing the guide alert
 		window.localStorage.setItem(guideAlertKey, JSON.stringify(usingAlertSpace));
 	}
+}
+
+function helpButton() {
+	document.getElementById(helpModalId).show = true;
+}
+
+function initializeHelpModal() {
+	let list = makeUL(helpModalTips);
+	document.getElementById(helpModalBodyId).appendChild(list);
+}
+
+function makeUL(array) {
+	// Create the list element:
+	var list = document.createElement("ul");
+
+	for (var i = 0; i < array.length; i++) {
+		// Create the list item:
+		var item = document.createElement("li");
+
+		// Set its contents:
+		item.appendChild(document.createTextNode(array[i]));
+
+		// Add it to the list:
+		list.appendChild(item);
+	}
+
+	// Finally, return the constructed list:
+	return list;
 }
 
 function openContactLink() {

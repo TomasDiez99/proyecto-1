@@ -6,18 +6,14 @@ const minLength = 5;
 //Progress bar update
 function updateBar(value) {
 	updatingBar = true;
-	let strengthDisplay = document.getElementById(strengthDisplayId);
-	let elem = document.getElementById("myBar");
+	let elem = document.getElementById(barId);
 	let width = 0;
-	console.log("width " + width + " .");
 	let id = setInterval(frame, 1);
 	function frame() {
 		if (width <= value) {
-			console.log("arrive return");
 			width += arrive(width, value);
 			elem.style.width = width + "%";
 			elem.innerHTML = width.toFixed(0) + "%";
-			strengthDisplay.innerHTML = width;
 		} else {
 			clearInterval(id);
 			updatingBar = false;
@@ -45,6 +41,7 @@ function arrive(position, target) {
 	}
 	return velocity;
 }
+
 function computeStrength(passwordValues) {
 	let strength = 0;
 	let i = 0;
@@ -59,15 +56,26 @@ function computeStrength(passwordValues) {
 }
 
 function showStrength(passStrength) {
+	let strengthDisplay = document.getElementById(strengthDisplayId);
+	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
+	if (passStrength < 35) {
+		strengthDisplay.className = "alert alert-danger";
+		strengthDisplay.innerHTML =
+			'Your password is <a href="https://www.mcafee.com/blogs/consumer/family-safety/15-tips-to-better-password-security/" class="alert-link">vulnerable!</a>';
+	} else {
+		if (passStrength < 70) {
+			strengthDisplay.className = "alert alert-warning";
+			strengthDisplay.innerHTML = "Your password looks <i>weak</i>";
+		} else {
+			strengthDisplay.className = "alert alert-success";
+			strengthDisplay.innerHTML = "Your password is <strong>strong</strong>";
+		}
+	}
 }
 
 function hasMinLength(password) {
-	if (password.length >= minLength) {
-		return true;
-	} else {
-		return false;
-	}
+	return password.length >= minLength;
 }
 
 function hasSymbols(password) {
@@ -88,20 +96,10 @@ function hasLetter(password) {
 function hasUpperCase(password) {
 	let lowerCasePassword = password.toLowerCase();
 	let res = password.localeCompare(lowerCasePassword);
-	if (res == 0) {
-		/*the strings were equals, this mean the password dont have uppercase letters */
-		return false;
-	} else {
-		return true;
-	}
+	return !(res == 0);
 }
 function hasLowerCase(password) {
 	let upperCasePassword = password.toUpperCase();
 	let res = password.localeCompare(upperCasePassword);
-	if (res == 0) {
-		/*the strings were equals, this mean the password dont have lowercase letters */
-		return false;
-	} else {
-		return true;
-	}
+	return !(res == 0);
 }

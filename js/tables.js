@@ -21,12 +21,12 @@ function updateResultTable(resultTablePairs) {
 
 function updateResultTableAux(tableId, resultTablePairs) {
 	for (let i = 0; i < resultTablePairs.length; i++) {
-		var cell = document.getElementById(tableId + "row" + i + "cell1"); //Value cell format id
-		enableCell(cell, resultTablePairs[i].val);
+		let cell = document.getElementById(tableId + "row" + i + "cell1"); //Value cell format id
+		updateCell(cell, resultTablePairs[i].val);
 	}
 }
 
-function enableCell(cell, propertyValue) {
+function updateCell(cell, propertyValue) {
 	if (propertyValue) {
 		cell.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
 	} else {
@@ -38,10 +38,10 @@ function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs) {
 	let myTable = document.createElement("TABLE");
 	myTable.id = tableId;
 	myTable.className += " table";
-	myTable.className += " table-bordered";
 	myTable.className += " table-hover";
 	myTable.className += " table-responsive";
 	myTable.className += " custom-table";
+	myTable.className += " text-center";
 	document.getElementById(parentId).appendChild(myTable);
 	initializeTableHeader(myTable, tableHeaderDesc);
 	initializeTableBody(tableId, myTable, tablePairs);
@@ -102,12 +102,12 @@ function updateHistoryTableAux() {
 	for (let i = 0; i < pastPasswords.length; i++) {
 		let cellPass = document.getElementById(
 			historyTableId + "row" + i + "cell0"
-		); //Password cell format id
+		); //Password cell id format
 		cellPass.innerHTML = pastPasswords[i].desc;
 
 		let cellStrength = document.getElementById(
 			historyTableId + "row" + i + "cell1"
-		); //Strength cell format id
+		); //Strength cell id format
 		cellStrength.innerHTML = pastPasswords[i].val;
 	}
 }

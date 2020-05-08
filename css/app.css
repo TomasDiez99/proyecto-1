@@ -11,7 +11,7 @@
 html,
 body {
 	color: var(--primaryColor);
-	transition: 0.2s ease all;
+	transition: 0.1s ease all;
 	height: 100%;
 	/* The html and body elements cannot have any padding or margin. */
 }
@@ -68,14 +68,17 @@ body {
 [data-theme="dark"] .bg-black {
 	background-color: var(--primaryColorDark) !important;
 }
+
 [data-theme="dark"] .btn-outline-secondary {
 	background-color: var(--primaryColorDark) !important;
 	color: var(--secondaryColorDark) !important;
 }
+
 [data-theme="dark"] #footer,
 #push {
 	color: var(--primaryColorDark) !important;
 }
+
 [data-theme="dark"] .custom-table {
 	border: 3px solid var(--primaryColorDark) !important;
 	color: var(--primaryColorDark) !important;
@@ -92,33 +95,6 @@ body {
 	border-color: var(--primaryColor);
 }
 
-#myProgress {
-	width: 100%;
-}
-#myBar {
-	width: 100%;
-	height: 30px;
-	line-height: 30px; /* same as height for vertical align*/
-	text-align: center;
-}
-
-.logo-row {
-	height: 170px;
-}
-/*
-.row{
-	border: 1px solid gray;
-}
-
-.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12{
-	border: 2px dotted gray;
-}*/
-/*
-.centered{
-	padding-left: 10px;
-	padding-right: 10px;
-}*/
-
 .box {
 	max-width: 100%;
 	height: auto;
@@ -130,6 +106,22 @@ body {
 	color: var(--primaryColor);
 	margin-top: 1rem;
 }
+
+#strength-display {
+	visibility: hidden;
+	margin-top: 1rem;
+}
+
+#myProgress {
+	width: 100%;
+}
+#myBar {
+	width: 100%;
+	height: 30px;
+	line-height: 30px; /* same as height for vertical align*/
+	text-align: center;
+}
+
 /*Bootstrap alerts styling*/
 #pageMessages {
 	position: fixed;

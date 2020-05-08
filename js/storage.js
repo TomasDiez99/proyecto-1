@@ -5,7 +5,7 @@
 //This function deletes the first pastPassword if the array exceeds the maximun count and puts element at the start of the array
 function updatePastPasswords(password, passStrength) {
 	if (maxPastPasswordsCount != pastPasswords.length) {
-		//this means the maxPastPasswordsCount changed and the array must be updated to that length
+		//this means the maxPastPasswordsCount changed by programmer. A mock array replaces the history
 		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
 			pastPasswords.push(new PairDescValue("-", "-"));
 		}
@@ -24,7 +24,7 @@ function loadPastPasswords() {
 		//Local storage not found
 		createAlert(
 			"ERROR",
-			"BROWSER LOCAL STORAGE NOT FOUND",
+			"BROWSER LOCAL STORAGE SYSTEM NOT FOUND",
 			"CHANGES MAY NOT BE SAVED",
 			"danger",
 			true,
@@ -33,24 +33,16 @@ function loadPastPasswords() {
 			false
 		);
 	} else {
-		var pastPasswordsCode = window.localStorage.getItem(passwordsKey); //Get the last pastPasswords array stored in browser
+		var pastPasswordsCode = window.localStorage.getItem(passwordsKey);
 	}
-	pastPasswords = JSON.parse(pastPasswordsCode); //Parse the string to get the actual pastPasswords array
-
-	//This means is the first time the user operates with the page or the programmer changed the maxPastPasswordCount
+	pastPasswords = JSON.parse(pastPasswordsCode);
+	//Generates mock array if it is the first time the user operates with the page or the programmer changed the maxPastPasswordCount
 	if (pastPasswords == null || maxPastPasswordsCount != pastPasswords.length) {
-		let mockPass = [];
-		let mockPastPasswordsStrengths = [];
-		for (let i = 0; i < maxPastPasswordsCount; i++) {
-			mockPass.push("-");
-			mockPastPasswordsStrengths.push("-");
+		pastPasswords = [];
+		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
+			pastPasswords.push(new PairDescValue("-", "-"));
 		}
-		pastPasswords = buildPairs(
-			mockPass,
-			mockPastPasswordsStrengths,
-			maxPastPasswordsCount
-		);
-		window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords)); //Stores the mock array if its the first time
+		window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords));
 	} else {
 		for (
 			let i = 0;
@@ -72,8 +64,8 @@ function updateGuideAlert() {
 		//this means is the first time in page
 		createAlert(
 			"Hey!",
-			"Here, take some tips",
-			"- Press H toggle on and off history table",
+			"Need some help?",
+			"- Press Help button to view tips",
 			"primary",
 			true,
 			false,
