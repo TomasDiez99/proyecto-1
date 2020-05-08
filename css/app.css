@@ -1,93 +1,95 @@
-
-:root{
+:root {
 	/*Light mode*/
-	--primaryColor: #2B7586;
-	--secondaryColor: #F4E5B1;
+	--primaryColor: #2b7586;
+	--secondaryColor: #f4e5b1;
 
 	/*Dark mode*/
-	--primaryColorDark: #E3671D;
-	--secondaryColorDark: #2F272F;
+	--primaryColorDark: #e3671d;
+	--secondaryColorDark: #2f272f;
 }
 
-html, body{
-	
-  color: var(--primaryColor);
-  transition: 0.2s ease all;
-    height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
+html,
+body {
+	color: var(--primaryColor);
+	transition: 0.2s ease all;
+	height: 100%;
+	/* The html and body elements cannot have any padding or margin. */
 }
 body {
-  background-color: var(--secondaryColor) ;
+	background-color: var(--secondaryColor);
 }
 
 /* Wrapper for page content to push down footer */
-#wrap{
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -100px;
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	/* Negative indent footer by it's height */
+	margin: 0 auto -100px;
 }
 
 /* Set the fixed height of the footer here */
-#push, #footer {
-  height: 100px;
+#push,
+#footer {
+	height: 100px;
 }
-
 
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
-    #footer {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
 }
 
-[data-theme="dark"]{
+[data-theme="dark"] {
 	background-color: var(--secondaryColorDark) !important;
 	color: var(--primaryColorDark) !important;
 }
 
-[data-theme="dark"] html, [data-theme="dark"] body{
-  background-color: var(--secondaryColorDark) !important;
-  color: var(--primaryColorDark) !important;
-  height: 100%;
+[data-theme="dark"] html,
+[data-theme="dark"] body {
+	background-color: var(--secondaryColorDark) !important;
+	color: var(--primaryColorDark) !important;
+	height: 100%;
 }
 
-[data-theme="dark"] .bg-light{
-	background-color:var(--primaryColorDark) !important;
+[data-theme="dark"] .bg-light {
+	background-color: var(--primaryColorDark) !important;
 	color: var(--secondaryColorDark) !important;
 }
-  
-[data-theme="dark"] .bg-white{
-	background-color:var(--secondaryColorDark) !important;
-}
-  
-[data-theme="dark"] .bg-black{
-	background-color: var(--primaryColorDark) !important;
-}
-[data-theme="dark"] .btn-outline-secondary{
-    background-color: var(--primaryColorDark) !important;
-    color:var(--secondaryColorDark) !important;
-}
-[data-theme="dark"] #footer, #push{
-	  color: var(--primaryColorDark) !important;
-}
-[data-theme="dark"] .custom-table{
-    border: 3px solid var(--primaryColorDark) !important;
-    color:var(--primaryColorDark) !important;
+
+[data-theme="dark"] .bg-white {
+	background-color: var(--secondaryColorDark) !important;
 }
 
-.bg-light{
+[data-theme="dark"] .bg-black {
+	background-color: var(--primaryColorDark) !important;
+}
+[data-theme="dark"] .btn-outline-secondary {
+	background-color: var(--primaryColorDark) !important;
+	color: var(--secondaryColorDark) !important;
+}
+[data-theme="dark"] #footer,
+#push {
+	color: var(--primaryColorDark) !important;
+}
+[data-theme="dark"] .custom-table {
+	border: 3px solid var(--primaryColorDark) !important;
+	color: var(--primaryColorDark) !important;
+}
+
+.bg-light {
 	color: var(--secondaryColor) !important;
 	background-color: var(--primaryColor) !important;
 }
 /*Custom btn colors*/
-.btn-outline-secondary{
-  background-color: var(--primaryColor) !important;
-  color:var(--secondaryColor) !important;
+.btn-outline-secondary {
+	background-color: var(--primaryColor) !important;
+	color: var(--secondaryColor) !important;
+	border-color: var(--primaryColor);
 }
 
 #myProgress {
@@ -98,6 +100,10 @@ body {
 	height: 30px;
 	line-height: 30px; /* same as height for vertical align*/
 	text-align: center;
+}
+
+.logo-row {
+	height: 170px;
 }
 /*
 .row{
@@ -114,39 +120,35 @@ body {
 }*/
 
 .box {
-    max-width: 100%;
-    height: auto;
+	max-width: 100%;
+	height: auto;
 }
 
-.custom-table{
+.custom-table {
 	border-collapse: collapse;
 	border: 3px solid var(--primaryColor);
-	color:var(--primaryColor);
+	color: var(--primaryColor);
 	margin-top: 1rem;
 }
-
-
-
-
 /*Bootstrap alerts styling*/
 #pageMessages {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  width: 30%;
+	position: fixed;
+	bottom: 15px;
+	right: 15px;
+	width: 30%;
 }
 
 .alert {
-  position: relative;
+	position: relative;
 }
 
 .alert .close {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 1em;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 1em;
 }
 
 .alert .fa {
-  margin-right:.3em;
+	margin-right: 0.3em;
 }
