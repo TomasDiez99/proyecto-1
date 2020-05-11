@@ -1,8 +1,5 @@
 "use strict";
 
-//Global variables
-const minLength = 5;
-
 //Progress bar update
 function updateBar(value) {
 	updatingBar = true;
@@ -22,7 +19,7 @@ function updateBar(value) {
 }
 //Arrive steering behaviour
 function arrive(position, target) {
-	let thresholdRadius = target / 2;
+	let thresholdRadius = target * 0.5;
 	let maxSpeed = 0.5;
 	let offsetVelocity = 0.002;
 	let accelerationTweaker = 0.008;
@@ -43,6 +40,7 @@ function arrive(position, target) {
 }
 
 function computeStrength(passwordValues) {
+	//Mockup strength calculation
 	let strength = 0;
 	let i = 0;
 	while (i < passwordValues.length) {
@@ -59,19 +57,38 @@ function showStrength(passStrength) {
 	let strengthDisplay = document.getElementById(strengthDisplayId);
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
+	let para = document.createElement("P"); //Where the result content goes
 	if (passStrength < 35) {
 		strengthDisplay.className = "alert alert-danger";
-		strengthDisplay.innerHTML =
-			'Your password is <a href="https://www.mcafee.com/blogs/consumer/family-safety/15-tips-to-better-password-security/" class="alert-link">vulnerable!</a>';
+		let linkElem = document.createElement("A");
+		linkElem.href =
+			"https://www.mentalfloss.com/article/504786/8-tips-make-your-passwords-strong-possible";
+		linkElem.className = " alert-link";
+		let linkText = document.createTextNode("Learn more");
+		linkElem.appendChild(linkText);
+		let displayText = document.createTextNode("Your password is vulnerable! ");
+		para.appendChild(displayText);
+		para.appendChild(linkElem);
 	} else {
 		if (passStrength < 70) {
 			strengthDisplay.className = "alert alert-warning";
-			strengthDisplay.innerHTML = "Your password looks <i>weak</i>";
+			let emElem = document.createElement("EM");
+			let emText = document.createTextNode("weak");
+			emElem.appendChild(emText);
+			let displayText = document.createTextNode("Your password looks ");
+			para.appendChild(displayText);
+			para.appendChild(emElem);
 		} else {
 			strengthDisplay.className = "alert alert-success";
-			strengthDisplay.innerHTML = "Your password is <strong>strong</strong>";
+			let strongElem = document.createElement("STRONG");
+			let strongText = document.createTextNode("strong!");
+			strongElem.appendChild(strongText);
+			let displayText = document.createTextNode("Your password is ");
+			para.appendChild(displayText);
+			para.appendChild(strongElem);
 		}
 	}
+	strengthDisplay.replaceChild(para, strengthDisplay.firstChild); //Updates the alert with the new content
 }
 
 function hasMinLength(password) {

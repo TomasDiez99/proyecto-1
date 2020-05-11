@@ -5,7 +5,7 @@
 //This function deletes the first pastPassword if the array exceeds the maximun count and puts element at the start of the array
 function updatePastPasswords(password, passStrength) {
 	if (maxPastPasswordsCount != pastPasswords.length) {
-		//this means the maxPastPasswordsCount changed by programmer. A mock array replaces the history
+		//this means the maxPastPasswordsCount changed by programmer. A mockup array replaces the history
 		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
 			pastPasswords.push(new PairDescValue("-", "-"));
 		}
@@ -36,7 +36,7 @@ function loadPastPasswords() {
 		var pastPasswordsCode = window.localStorage.getItem(passwordsKey);
 	}
 	pastPasswords = JSON.parse(pastPasswordsCode);
-	//Generates mock array if it is the first time the user operates with the page or the programmer changed the maxPastPasswordCount
+	//Generates mockup array if it is the first time the user operates with the page or the programmer changed the maxPastPasswordCount
 	if (pastPasswords == null || maxPastPasswordsCount != pastPasswords.length) {
 		pastPasswords = [];
 		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
@@ -57,7 +57,7 @@ function loadPastPasswords() {
 	}
 }
 
-function updateGuideAlert() {
+function loadGuideAlert() {
 	let makeGuideAlertCode = window.localStorage.getItem(guideAlertKey);
 	makeGuideAlert = Boolean(JSON.parse(makeGuideAlertCode)); //Transform null to false in parse failure case
 	if (makeGuideAlert) {
@@ -80,36 +80,32 @@ function clearStorage() {
 		loadPastPasswords();
 		makeGuideAlert = true; //Reset the flag to make guide alert when reload
 		window.localStorage.setItem(guideAlertKey, JSON.stringify(makeGuideAlert));
-		console.log("Storage Cleared");
 	}
 }
 
 function loadMode() {
-	let mode = window.localStorage.getItem("darkSwitch");
-	if (mode == null) {
-		//This means we are in light mode
-		console.log("NO DARK MODE");
-		console.log("el mode loaded es " + mode);
-		document.getElementById("logo-container").src = "assets/logo.png";
+	let mode = window.localStorage.getItem(darkSwitchId);
+	setDarkModeAssets(mode != null);
+}
+
+function setDarkModeAssets(enableDarkMode) {
+	if (enableDarkMode) {
+		document.getElementById(logoContainerId).src = secondaryLogoPath;
+		document.getElementById(pageIconId).href = secondaryPageIconPath;
 	} else {
-		console.log("DARK MODE");
-		console.log("el mode loaded es " + mode);
-		document.getElementById("logo-container").src = "assets/secondaryLogo.png";
+		document.getElementById(logoContainerId).src = logoPath;
+		document.getElementById(pageIconId).href = pageIconPath;
 	}
 }
 
 function updateMode() {
-	let mode = window.localStorage.getItem("darkSwitch");
-	if (mode == null) {
-		//This means we changed to dark mode
-		console.log("DARK MODE");
-		console.log("el mode es " + mode);
-		document.getElementById("logo-container").src = "assets/secondaryLogo.png";
-		document.getElementById("page-icon").href = "assets/secondaryPageIcon.png";
-	} else {
-		console.log("NO DARK MODE");
-		console.log("el mode es " + mode);
-		document.getElementById("logo-container").src = "assets/logo.png";
-		document.getElementById("page-icon").href = "assets/pageIcon.png";
+	let mode = window.localStorage.getItem(darkSwitchId);
+
+	if (/Edge/.test(navigator.userAgent)) {
+		//Fix for Edge Browser bug where the assets were set with the opposite mode
+		setDarkModeAssets(mode != null);
+		return;
 	}
+
+	setDarkModeAssets(mode == null);
 }

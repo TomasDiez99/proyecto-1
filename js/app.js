@@ -1,10 +1,51 @@
 "use strict"; //For cleaner code
 
 //MUST BE IMPORTED BEFORE STORAGE.JS IN HTML IMPORT
-
 //Global Variables and classes
-const passwordField = "password-field";
-const testButton = "test-button";
+const minLength = 6;
+const maxPastPasswordsCount = 5;
+
+const logoPath = "assets/logo.png";
+const pageIconPath = "assets/pageIcon.png";
+const secondaryLogoPath = "assets/secondaryLogo.png";
+const secondaryPageIconPath = "assets/secondaryPageIcon.png";
+
+const darkSwitchId = "dark-switch";
+const logoContainerId = "logo-container";
+const pageIconId = "page-icon";
+const passwordFieldId = "password-field";
+const testButtonId = "test-button";
+const alertZoneId = "alert-zone";
+const guideZoneId = "guide-zone";
+const strengthDisplayId = "strength-display";
+const helpModalId = "myModal";
+const helpModalBodyId = "modal-body";
+const barId = "myBar";
+const resultTableId = "result-table";
+const resultTableParentId = "result-table-col";
+const historyTableId = "history-table";
+const historyTableParentId = "history-table-col";
+
+const passwordsKey = "passwordsKey";
+const guideAlertKey = "guideAlertKey";
+const helpModalTips = [
+	"Press H to toggle on/off the history table",
+	"You can always delete the history by clicking the 'Clear Data' button",
+	"Try the dark mode by clicking the switch at the upper right corner!",
+];
+const resultTableHeaderDesc = ["Propierties of your password"];
+const resultTableBodyDesc = [
+	"At least " + minLength + " characters",
+	"Has Numbers",
+	"Has Letters",
+	"Has Symbols",
+	"Upper Case",
+	"Lower Case",
+];
+const historyTableHeaderDesc = [
+	"Last " + maxPastPasswordsCount + " password(s)",
+	"Strength",
+];
 const passwordProperties = [
 	hasMinLength,
 	hasNumber,
@@ -13,47 +54,12 @@ const passwordProperties = [
 	hasUpperCase,
 	hasLowerCase,
 ];
-const alertZoneId = "alert-zone";
-const guideZoneId = "guide-zone";
 var makeGuideAlert = false;
 var usingAlertSpace = false;
 var updatingBar = false;
-const barId = "myBar";
-const strengthDisplayId = "strength-display";
-
-const helpModalId = "myModal";
-const helpModalBodyId = "modal-body";
-const helpModalTips = [
-	"Press H to toggle on/off the history table",
-	"You can always delete the history by clicking the 'Clear Data' button",
-	"Try the dark mode by clicking the switch at the upper right corner!",
-];
-
 var initializedResultTable = false;
-const resultTableId = "result-table";
-const resultTableHeaderDesc = ["Propierties of your password"];
-const resultTableBodyDesc = [
-	"Min Length",
-	"Has Numbers",
-	"Has Letters",
-	"Has Symbols",
-	"Upper Case",
-	"Lower Case",
-];
-const resultTableParentId = "result-table-col";
-
 var initializedHistoryTable = false;
-const maxPastPasswordsCount = 5;
-const historyTableId = "history-table";
-const historyTableHeaderDesc = [
-	"Last " + maxPastPasswordsCount + " password(s)",
-	"Strength",
-];
-const historyTableParentId = "history-table-col";
 var pastPasswords = [];
-
-const passwordsKey = "passwordsKey";
-const guideAlertKey = "guideAlertKey";
 
 /**
  * Pair class that stores two attributes for flexible usage
@@ -101,14 +107,13 @@ function onloadPage() {
 	usingAlertSpace = false;
 	loadMode();
 	initializeHelpModal();
-	updateGuideAlert();
-
+	loadGuideAlert();
 	loadPastPasswords();
 }
 //Enter key handler for testPassword
-document.getElementById(passwordField).addEventListener("keyup", (event) => {
+document.getElementById(passwordFieldId).addEventListener("keyup", (event) => {
 	if (event.key !== "Enter" || updatingBar) return; //Doesnt work while updating the progress bar of the last test
-	document.getElementById(testButton).click();
+	document.getElementById(testButtonId).click();
 	event.preventDefault();
 });
 
@@ -116,7 +121,7 @@ document.getElementById(passwordField).addEventListener("keyup", (event) => {
 document.addEventListener("keyup", (event) => {
 	if (
 		event.key !== "h" ||
-		document.getElementById(passwordField) == document.activeElement
+		document.getElementById(passwordFieldId) == document.activeElement
 	)
 		return;
 	//H letter keyCode. Only works if the password input field is not selected
@@ -129,7 +134,7 @@ function testPassword() {
 		return;
 	} //Dont want to analyze passwords while updating passwords
 
-	let password = document.getElementById(passwordField).value;
+	let password = document.getElementById(passwordFieldId).value;
 	if (0 == password.localeCompare("")) {
 		//If the user enters a empty string as input
 		if (!usingAlertSpace) {
@@ -146,7 +151,7 @@ function testPassword() {
 			);
 		}
 	} else {
-		document.getElementById(passwordField).value = ""; //Clears the input field
+		document.getElementById(passwordFieldId).value = ""; //Clears the input field
 		var passwordResults = [];
 		//This calls on every passwordProperties function and stores its result on passwordValues
 		for (let i = 0; i < passwordProperties.length; i++) {
@@ -274,21 +279,12 @@ function initializeHelpModal() {
 }
 
 function makeUL(array) {
-	// Create the list element:
-	var list = document.createElement("ul");
-
-	for (var i = 0; i < array.length; i++) {
-		// Create the list item:
-		var item = document.createElement("li");
-
-		// Set its contents:
+	let list = document.createElement("ul");
+	for (let i = 0; i < array.length; i++) {
+		let item = document.createElement("li");
 		item.appendChild(document.createTextNode(array[i]));
-
-		// Add it to the list:
 		list.appendChild(item);
 	}
-
-	// Finally, return the constructed list:
 	return list;
 }
 

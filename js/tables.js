@@ -22,16 +22,19 @@ function updateResultTable(resultTablePairs) {
 function updateResultTableAux(tableId, resultTablePairs) {
 	for (let i = 0; i < resultTablePairs.length; i++) {
 		let cell = document.getElementById(tableId + "row" + i + "cell1"); //Value cell format id
-		updateCell(cell, resultTablePairs[i].val);
+		updateIconCell(cell, resultTablePairs[i].val);
 	}
 }
 
-function updateCell(cell, propertyValue) {
+function updateIconCell(cell, propertyValue) {
+	let icon = document.createElement("I");
+	icon.setAttribute("aria-hidden", true);
 	if (propertyValue) {
-		cell.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
+		icon.className = " fa fa-check";
 	} else {
-		cell.innerHTML = '<i class="fa fa-times" aria-hidden="true"></i>';
+		icon.className = " fa fa-times";
 	}
+	cell.replaceChild(icon, cell.firstElementChild); //Removes the old child and
 }
 
 function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs) {
@@ -53,7 +56,10 @@ function initializeTableHeader(table, tableHeaderDesc) {
 	for (let i = 0; i < tableHeaderDesc.length; i++) {
 		//Puts the elements of the header array on the table header
 		let cell = row.insertCell(-1);
-		cell.innerHTML = "<strong>" + tableHeaderDesc[i] + "</strong>";
+		let strongElem = document.createElement("STRONG");
+		let textElem = document.createTextNode("" + tableHeaderDesc[i]);
+		strongElem.appendChild(textElem);
+		cell.appendChild(strongElem);
 	}
 }
 function initializeTableBody(tableId, table, tablePairs) {
@@ -63,11 +69,17 @@ function initializeTableBody(tableId, table, tablePairs) {
 
 		let cellDesc = row.insertCell(0);
 		cellDesc.id = row.id + "cell0";
-		cellDesc.innerHTML = tablePairs[i].desc;
+		let descPara = document.createElement("P");
+		let descText = document.createTextNode(tablePairs[i].desc);
+		descPara.appendChild(descText);
+		cellDesc.appendChild(descPara);
 
 		let cellVal = row.insertCell(1);
-		cellVal.innerHTML = tablePairs[i].val;
 		cellVal.id = row.id + "cell1";
+		let valPara = document.createElement("P");
+		let valText = document.createTextNode(tablePairs[i].val);
+		valPara.appendChild(valText);
+		cellVal.appendChild(valPara);
 	}
 }
 
@@ -103,11 +115,17 @@ function updateHistoryTableAux() {
 		let cellPass = document.getElementById(
 			historyTableId + "row" + i + "cell0"
 		); //Password cell id format
-		cellPass.innerHTML = pastPasswords[i].desc;
-
+		updateCell(cellPass, pastPasswords[i].desc);
 		let cellStrength = document.getElementById(
 			historyTableId + "row" + i + "cell1"
 		); //Strength cell id format
-		cellStrength.innerHTML = pastPasswords[i].val;
+		updateCell(cellStrength, pastPasswords[i].val);
 	}
+}
+
+function updateCell(cell, text) {
+	let para = document.createElement("P");
+	let textNode = document.createTextNode(text);
+	para.appendChild(textNode);
+	cell.replaceChild(para, cell.firstElementChild);
 }
