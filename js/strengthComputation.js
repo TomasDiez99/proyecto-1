@@ -4,39 +4,59 @@
 function updateBar(value) {
 	updatingBar = true;
 	let elem = document.getElementById(barId);
-	let width = 0;
-	let id = setInterval(frame, 1);
+	let width;
+	let aux = parseFloat(elem.innerHTML);
+	let updateOffset = 0.5;
+	Number.isNaN(aux) ? (width = 0) : (width = aux); //The first time, the parseFloat gives a NaN return;
+
+	let last = Date.now();
+	const epsilon = 0.005;
 	function frame() {
-		if (width <= value) {
-			width += arrive(width, value);
+		let current = Date.now();
+		let dt = (current - last) / 1000;
+
+		let step = arrive(width, value, dt);
+		if (Math.abs(step) > epsilon) {
+			width += step;
 			elem.style.width = width + "%";
 			elem.innerHTML = width.toFixed(0) + "%";
+
+			requestAnimationFrame(frame);
 		} else {
-			clearInterval(id);
+			elem.style.width = value + "%";
+			elem.innerHTML = value + "%";
+
 			updatingBar = false;
 		}
+		last = current;
 	}
+	requestAnimationFrame(frame);
 }
-//Arrive steering behaviour
-function arrive(position, target) {
-	let thresholdRadius = target * 0.5;
-	let maxSpeed = 0.5;
-	let offsetVelocity = 0.002;
-	let accelerationTweaker = 0.008;
 
-	let toTarget = target - position;
-	let distance = toTarget * Math.sign(toTarget);
-	let desiredVelocity = Math.sign(toTarget) * maxSpeed;
-	let velocity;
+//Optimizes the sqrt function
+function inverseSqrEase(t) {
+	//t is in [0,1]
+	t = 1 - t;
+	t = t * t * t;
+	return 1 - t;
+}
 
-	if (distance < thresholdRadius) {
-		//Inside progressive slowdown area
-		velocity =
-			Math.sign(toTarget) * distance * accelerationTweaker + offsetVelocity;
-	} else {
-		velocity = desiredVelocity;
+function arriveEase(rad, dist) {
+	if (dist > rad) {
+		return rad;
 	}
-	return velocity;
+	let t = dist / rad;
+	return t * rad;
+}
+
+//Arrive steering behaviour
+function arrive(position, target, dt) {
+	const thresholdRadius = target * 0.5;
+	const speed = 2;
+
+	let direction = Math.sign(target - position);
+	let distance = Math.abs(target - position);
+	return direction * arriveEase(thresholdRadius, distance) * speed * dt;
 }
 
 function computeStrength(passwordValues) {

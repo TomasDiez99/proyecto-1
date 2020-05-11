@@ -2,7 +2,6 @@
 	/*Light mode*/
 	--primaryColor: #2b7586;
 	--secondaryColor: #f4e5b1;
-
 	/*Dark mode*/
 	--primaryColorDark: #e3671d;
 	--secondaryColorDark: #2f272f;
@@ -104,7 +103,6 @@ body {
 	border-collapse: collapse;
 	border: 3px solid var(--primaryColor);
 	color: var(--primaryColor);
-	margin-top: 1rem;
 }
 
 #strength-display {
