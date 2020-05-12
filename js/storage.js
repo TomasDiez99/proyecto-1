@@ -84,22 +84,22 @@ function clearStorage() {
 }
 
 function loadMode() {
-	let mode = window.localStorage.getItem(darkSwitchId);
+	let mode = window.localStorage.getItem(darkSwitchKey);
 	setDarkModeAssets(mode != null);
 }
 
 function setDarkModeAssets(enableDarkMode) {
 	if (enableDarkMode) {
-		document.getElementById(logoContainerId).src = secondaryLogoPath;
-		document.getElementById(pageIconId).href = secondaryPageIconPath;
+		logoContainer.src = secondaryLogoPath;
+		pageIcon.href = secondaryPageIconPath;
 	} else {
-		document.getElementById(logoContainerId).src = logoPath;
-		document.getElementById(pageIconId).href = pageIconPath;
+		logoContainer.src = logoPath;
+		pageIcon.href = pageIconPath;
 	}
 }
 
 function updateMode() {
-	let mode = window.localStorage.getItem(darkSwitchId);
+	let mode = window.localStorage.getItem(darkSwitchKey);
 
 	if (/Edge/.test(navigator.userAgent)) {
 		//Fix for Edge Browser bug where the assets were set with the opposite mode

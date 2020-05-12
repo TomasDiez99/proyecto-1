@@ -7,14 +7,9 @@ function updateTables(password, resultTablePairs, passStrength) {
 }
 
 function updateResultTable(resultTablePairs) {
-	if (!initializedResultTable) {
-		initializedResultTable = true;
-		initializeTable(
-			resultTableParentId,
-			resultTableId,
-			resultTableHeaderDesc,
-			resultTablePairs
-		);
+	let resultTable = document.getElementById(resultTableId);
+	if (0 == resultTable.style.display.localeCompare("none")) {
+		resultTable.style.display = "table";
 	}
 	updateResultTableAux(resultTableId, resultTablePairs);
 }
@@ -48,6 +43,7 @@ function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs) {
 	document.getElementById(parentId).appendChild(myTable);
 	initializeTableHeader(myTable, tableHeaderDesc);
 	initializeTableBody(tableId, myTable, tablePairs);
+	myTable.style.display = "none";
 }
 
 function initializeTableHeader(table, tableHeaderDesc) {
@@ -83,31 +79,18 @@ function initializeTableBody(tableId, table, tablePairs) {
 	}
 }
 
-//This is called for the first time per reload when the user clicks the "History button"
 function toggleHistoryTable() {
-	if (!initializedHistoryTable) {
-		initializeTable(
-			historyTableParentId,
-			historyTableId,
-			historyTableHeaderDesc,
-			pastPasswords
-		);
+	let table = document.getElementById(historyTableId);
+	if (0 == table.style.display.localeCompare("none")) {
+		table.style.display = "table";
 	} else {
-		deleteTable(historyTableId);
+		table.style.display = "none";
 	}
-	initializedHistoryTable = !initializedHistoryTable;
-}
-
-function deleteTable(tableId) {
-	let table = document.getElementById(tableId);
-	table.parentNode.removeChild(table);
 }
 
 function updateHistoryTable(password, passStrength) {
 	updatePastPasswords(password, passStrength);
-	if (initializedHistoryTable) {
-		updateHistoryTableAux();
-	}
+	updateHistoryTableAux();
 }
 
 function updateHistoryTableAux() {

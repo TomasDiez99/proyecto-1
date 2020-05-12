@@ -3,9 +3,8 @@
 //Progress bar update
 function updateBar(value) {
 	updatingBar = true;
-	let elem = document.getElementById(barId);
 	let width;
-	let aux = parseFloat(elem.innerHTML);
+	let aux = parseFloat(bar.innerHTML);
 	let updateOffset = 0.5;
 	Number.isNaN(aux) ? (width = 0) : (width = aux); //The first time, the parseFloat gives a NaN return;
 
@@ -18,13 +17,13 @@ function updateBar(value) {
 		let step = arrive(width, value, dt);
 		if (Math.abs(step) > epsilon) {
 			width += step;
-			elem.style.width = width + "%";
-			elem.innerHTML = width.toFixed(0) + "%";
+			bar.style.width = width + "%";
+			bar.innerHTML = width.toFixed(0) + "%";
 
 			requestAnimationFrame(frame);
 		} else {
-			elem.style.width = value + "%";
-			elem.innerHTML = value + "%";
+			bar.style.width = value + "%";
+			bar.innerHTML = value + "%";
 
 			updatingBar = false;
 		}
@@ -74,7 +73,6 @@ function computeStrength(passwordValues) {
 }
 
 function showStrength(passStrength) {
-	let strengthDisplay = document.getElementById(strengthDisplayId);
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
 	let para = document.createElement("P"); //Where the result content goes
@@ -116,7 +114,7 @@ function hasMinLength(password) {
 }
 
 function hasSymbols(password) {
-	let regExpr = /[$-/:-?{-~!"^_`\[\]]/; //Not a english letter or a digit (\S) or a white space Regular expression
+	let regExpr = /[$-/:-?{-~!"^_`\[\]]/; //To exclude certain special characters, change this regex
 	return regExpr.test(password);
 }
 
