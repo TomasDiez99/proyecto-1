@@ -72,7 +72,7 @@ function computeStrength(passwordValues) {
 	return strength * 100;
 }
 
-function showStrength(passStrength) {
+function showStrength(password, passStrength) {
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
 	let para = document.createElement("P"); //Where the result content goes
@@ -84,7 +84,9 @@ function showStrength(passStrength) {
 		linkElem.className = " alert-link";
 		let linkText = document.createTextNode("Learn more");
 		linkElem.appendChild(linkText);
-		let displayText = document.createTextNode("Your password is vulnerable! ");
+		let displayText = document.createTextNode(
+			"Your password '" + password + "' is vulnerable! "
+		);
 		para.appendChild(displayText);
 		para.appendChild(linkElem);
 	} else {
@@ -93,7 +95,9 @@ function showStrength(passStrength) {
 			let emElem = document.createElement("EM");
 			let emText = document.createTextNode("weak");
 			emElem.appendChild(emText);
-			let displayText = document.createTextNode("Your password looks ");
+			let displayText = document.createTextNode(
+				"Your password '" + password + "' looks "
+			);
 			para.appendChild(displayText);
 			para.appendChild(emElem);
 		} else {
@@ -101,7 +105,9 @@ function showStrength(passStrength) {
 			let strongElem = document.createElement("STRONG");
 			let strongText = document.createTextNode("strong!");
 			strongElem.appendChild(strongText);
-			let displayText = document.createTextNode("Your password is ");
+			let displayText = document.createTextNode(
+				"Your password '" + password + "' is "
+			);
 			para.appendChild(displayText);
 			para.appendChild(strongElem);
 		}

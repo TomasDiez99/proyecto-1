@@ -9,11 +9,16 @@ const logoPath = "assets/logo.png";
 const pageIconPath = "assets/pageIcon.png";
 const secondaryLogoPath = "assets/secondaryLogo.png";
 const secondaryPageIconPath = "assets/secondaryPageIcon.png";
+const lowPasswordSoundPath = "assets/audio/robloxdeath.mp3";
+const mediumPasswordSoundPath = "assets/audio/hammer.mp3";
+const highPasswordSoundPath = "assets/audio/musicbox.mp3";
 
 var logoContainer = document.getElementById("logo-container");
 var pageIcon = document.getElementById("page-icon");
 var passwordField = document.getElementById("password-field");
 const testButton = document.getElementById("test-button");
+const helpButton = document.getElementById("help-button");
+const testAudio = document.getElementById("test-password-audio");
 var strengthDisplay = document.getElementById("strength-display");
 var helpModal = document.getElementById("myModal");
 var helpModalBody = document.getElementById("modal-body");
@@ -138,10 +143,17 @@ passwordField.addEventListener("keyup", (event) => {
 	event.preventDefault();
 });
 
+//Escape key handler for help Modal
+document.addEventListener("keyup", (event) => {
+	if (event.key !== "Escape") return;
+	helpButton.click();
+	event.preventDefault();
+});
+
 //History table key handler
 document.addEventListener("keyup", (event) => {
 	if (event.key !== "h" || passwordField == document.activeElement) return;
-	//H letter keyCode. Only works if the password input field is not selected
+	//H letter listener. Only works if the password input field is not selected
 	toggleHistoryTable();
 	event.preventDefault();
 });
@@ -150,7 +162,6 @@ function testPassword() {
 	if (updatingBar) {
 		return;
 	} //Dont want to analyze passwords while updating passwords
-
 	let password = passwordField.value;
 	if (0 == password.localeCompare("")) {
 		//If the user enters a empty string as input
@@ -168,7 +179,6 @@ function testPassword() {
 			);
 		}
 	} else {
-		passwordField.value = ""; //Clears the input field
 		var passwordResults = [];
 		//This calls on every passwordProperties function and stores its result on passwordValues
 		for (let i = 0; i < passwordProperties.length; i++) {
@@ -176,8 +186,8 @@ function testPassword() {
 		}
 
 		let passStrength = computeStrength(passwordResults);
-		showStrength(passStrength);
-
+		showStrength(password, passStrength);
+		playTestSound(passStrength);
 		let resultTablePairs = buildPairs(
 			resultTableBodyDesc,
 			passwordResults,
@@ -286,10 +296,6 @@ function closeAlert(usingAlertSpace) {
 	}
 }
 
-function helpButton() {
-	helpModal.show = true;
-}
-
 function initializeHelpModal() {
 	let list = makeUL(helpModalTips);
 	helpModalBody.appendChild(list);
@@ -327,4 +333,19 @@ function openUNSLink() {
 		"Universidad Nacional del Sur",
 		"width=800,height=800"
 	);
+}
+
+function playTestSound(strength) {
+	testAudio.pause(); //Pauses the last sound executed before playing the next one
+	if (strength < 35) {
+		testAudio.src = lowPasswordSoundPath;
+	} else {
+		if (strength < 70) {
+			testAudio.src = mediumPasswordSoundPath;
+		} else {
+			testAudio.src = highPasswordSoundPath;
+		}
+	}
+	testAudio.load(); //Update the changes made
+	testAudio.play();
 }

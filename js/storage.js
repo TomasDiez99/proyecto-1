@@ -65,7 +65,7 @@ function loadGuideAlert() {
 		createAlert(
 			"Hey!",
 			"Need some help?",
-			"- Press Help button to view tips",
+			"- Press Escape or the Help button to view tips",
 			"primary",
 			true,
 			false,
