@@ -1,6 +1,5 @@
 "use strict"; //For cleaner code
 
-//MUST BE IMPORTED BEFORE STORAGE.JS IN HTML IMPORT
 //Global Variables and classes
 const minLength = 6;
 const maxPastPasswordsCount = 5;
@@ -20,9 +19,9 @@ const testButton = document.getElementById("test-button");
 const helpButton = document.getElementById("help-button");
 const testAudio = document.getElementById("test-password-audio");
 var strengthDisplay = document.getElementById("strength-display");
-var helpModal = document.getElementById("myModal");
 var helpModalBody = document.getElementById("modal-body");
 var bar = document.getElementById("myBar");
+var togglePasswordIcon = document.getElementById("toggle-password-icon");
 const resultTableId = "result-table";
 const resultTableParentId = "result-table-col";
 const historyTableId = "history-table";
@@ -33,6 +32,7 @@ const guideZoneId = "guide-zone";
 const darkSwitchKey = "dark-switch";
 const passwordsKey = "passwordsKey";
 const guideAlertKey = "guideAlertKey";
+const showPasswordKey = "showPasswordKey";
 const helpModalTips = [
 	"Press H to toggle on/off the history table",
 	"You can always delete the history by clicking the 'Clear Data' button",
@@ -62,6 +62,7 @@ const passwordProperties = [
 var makeGuideAlert = false;
 var usingAlertSpace = false;
 var updatingBar = false;
+var showPassword;
 var pastPasswords = [];
 
 /**
@@ -86,8 +87,15 @@ class PairDescValue {
 	}
 }
 
-//Builds an array of Pairs with the descs and vals arrays of same size. Can build mockup arrays
+/**
+ * Builds an array of Pairs with the descs and vals arrays of same size. Can build mockup arrays
+ * @param {any[]} descs - description array
+ * @param {any[]} vals - value array. It length must match descs's if none of them are null.
+ * @param {Number} length - length of the return array. Must match descs or vals if they arent null
+ * @returns {any[]} An array of Pairs with the descs and vals values
+ */
 function buildPairs(descs, vals, length) {
+
 	let pairs = [];
 
 	if (descs == null) {
@@ -113,16 +121,17 @@ function buildPairs(descs, vals, length) {
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//User interface related functions
+//USER INTERFACE RELATED FUNCTIONS
 
-//Onload page
 window.onload = onloadPage;
 function onloadPage() {
 	usingAlertSpace = false;
-	loadMode();
+	loadVisualMode();
 	initializeHelpModal();
 	loadGuideAlert();
 	loadPastPasswords();
+	loadPasswordType();
+
 	initializeTable(
 		historyTableParentId,
 		historyTableId,
@@ -135,10 +144,16 @@ function onloadPage() {
 		resultTableHeaderDesc,
 		buildPairs(resultTableBodyDesc, null, resultTableBodyDesc.length)
 	);
+
+	//Initialize tooltip elements to work properly
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 }
+
 //Enter key handler for testPassword
 passwordField.addEventListener("keyup", (event) => {
-	if (event.key !== "Enter" || updatingBar) return; //Doesnt work while updating the progress bar of the last test
+	if (event.key !== "Enter") return;
 	testButton.click();
 	event.preventDefault();
 });
@@ -153,10 +168,14 @@ document.addEventListener("keyup", (event) => {
 //History table key handler
 document.addEventListener("keyup", (event) => {
 	if (event.key !== "h" || passwordField == document.activeElement) return;
-	//H letter listener. Only works if the password input field is not selected
+	//Only works if the password input field is not selected
 	toggleHistoryTable();
 	event.preventDefault();
 });
+
+let currentPass = "";
+
+
 
 function testPassword() {
 	if (updatingBar) {
@@ -179,7 +198,7 @@ function testPassword() {
 			);
 		}
 	} else {
-		var passwordResults = [];
+		let passwordResults = [];
 		//This calls on every passwordProperties function and stores its result on passwordValues
 		for (let i = 0; i < passwordProperties.length; i++) {
 			passwordResults.push(passwordProperties[i].apply(null, [password]));
@@ -300,7 +319,11 @@ function initializeHelpModal() {
 	let list = makeUL(helpModalTips);
 	helpModalBody.appendChild(list);
 }
-
+/**
+ *
+ * @param {*array} array - an array of string
+ * @returns ul DOM object filled with the array elements
+ */
 function makeUL(array) {
 	let list = document.createElement("ul");
 	for (let i = 0; i < array.length; i++) {
@@ -312,35 +335,27 @@ function makeUL(array) {
 }
 
 function openContactLink() {
-	window.open(
-		"https://github.com/TomasDiez99",
-		"Contact",
-		"width=800,height=800"
-	);
+	window.open("https://github.com/TomasDiez99/proyecto-1/issues", "_blank");
 }
 
 function openFaLink() {
 	window.open(
-		"https://fontawesome.com/",
-		"Fontawesome",
-		"width=800,height=800"
-	);
+		"https://fontawesome.com/", "_blank");
 }
 
 function openUNSLink() {
 	window.open(
-		"https://cs.uns.edu.ar/home/",
-		"Universidad Nacional del Sur",
-		"width=800,height=800"
-	);
+		"https://cs.uns.edu.ar/home/", "_blank");
 }
 
 function playTestSound(strength) {
 	testAudio.pause(); //Pauses the last sound executed before playing the next one
-	if (strength < 35) {
+	const lowValue = 35;
+	const medValue = 70;
+	if (strength < lowValue) {
 		testAudio.src = lowPasswordSoundPath;
 	} else {
-		if (strength < 70) {
+		if (strength < medValue) {
 			testAudio.src = mediumPasswordSoundPath;
 		} else {
 			testAudio.src = highPasswordSoundPath;

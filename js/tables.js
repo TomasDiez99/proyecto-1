@@ -3,7 +3,8 @@
 //Tables Initialization and update
 function updateTables(password, resultTablePairs, passStrength) {
 	updateResultTable(resultTablePairs);
-	updateHistoryTable(password, passStrength);
+	updatePastPasswords(password, passStrength);
+	updateHistoryTable();
 }
 
 function updateResultTable(resultTablePairs) {
@@ -25,9 +26,9 @@ function updateIconCell(cell, propertyValue) {
 	let icon = document.createElement("I");
 	icon.setAttribute("aria-hidden", true);
 	if (propertyValue) {
-		icon.className = " fa fa-check";
+		icon.className = " fa fa-check fa-lg";
 	} else {
-		icon.className = " fa fa-times";
+		icon.className = " fa fa-times fa-lg";
 	}
 	cell.replaceChild(icon, cell.firstElementChild); //Removes the old child and
 }
@@ -36,7 +37,6 @@ function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs) {
 	let myTable = document.createElement("TABLE");
 	myTable.id = tableId;
 	myTable.className += " table";
-	myTable.className += " table-hover";
 	myTable.className += " table-responsive";
 	myTable.className += " custom-table";
 	myTable.className += " text-center";
@@ -89,16 +89,12 @@ function toggleHistoryTable() {
 }
 
 function updateHistoryTable(password, passStrength) {
-	updatePastPasswords(password, passStrength);
-	updateHistoryTableAux();
-}
-
-function updateHistoryTableAux() {
 	for (let i = 0; i < pastPasswords.length; i++) {
 		let cellPass = document.getElementById(
 			historyTableId + "row" + i + "cell0"
 		); //Password cell id format
 		updateCell(cellPass, pastPasswords[i].desc);
+
 		let cellStrength = document.getElementById(
 			historyTableId + "row" + i + "cell1"
 		); //Strength cell id format

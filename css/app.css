@@ -138,3 +138,8 @@ body {
 .alert .fa {
 	margin-right: 0.3em;
 }
+
+.pointOnHover:hover{
+	cursor: pointer;
+}
+  

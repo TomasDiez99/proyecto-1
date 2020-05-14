@@ -6,9 +6,7 @@
 function updatePastPasswords(password, passStrength) {
 	if (maxPastPasswordsCount != pastPasswords.length) {
 		//this means the maxPastPasswordsCount changed by programmer. A mockup array replaces the history
-		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
-			pastPasswords.push(new PairDescValue("-", "-"));
-		}
+		pastPasswords = buildPairs(null, null, maxPastPasswordsCount);
 	}
 
 	var newPastPasswordPair = new PairDescValue(password, passStrength);
@@ -16,7 +14,8 @@ function updatePastPasswords(password, passStrength) {
 		pastPasswords.shift(); //deletes the first element of the array
 	}
 	pastPasswords.push(newPastPasswordPair);
-	window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords)); //Stores (and possibly replaces) the pastPassword array in the browser
+
+	window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords));
 }
 
 function loadPastPasswords() {
@@ -38,10 +37,7 @@ function loadPastPasswords() {
 	pastPasswords = JSON.parse(pastPasswordsCode);
 	//Generates mockup array if it is the first time the user operates with the page or the programmer changed the maxPastPasswordCount
 	if (pastPasswords == null || maxPastPasswordsCount != pastPasswords.length) {
-		pastPasswords = [];
-		for (let i = pastPasswords.length; i < maxPastPasswordsCount; i++) {
-			pastPasswords.push(new PairDescValue("-", "-"));
-		}
+		pastPasswords = buildPairs(null, null, maxPastPasswordsCount);
 		window.localStorage.setItem(passwordsKey, JSON.stringify(pastPasswords));
 	} else {
 		for (
@@ -78,12 +74,15 @@ function clearStorage() {
 	if (confirm("Are you sure you want to delete the history?")) {
 		window.localStorage.clear();
 		loadPastPasswords();
-		makeGuideAlert = true; //Reset the flag to make guide alert when reload
+		updateHistoryTable(); //Visual refresh to the history table
+
+		loadPasswordType(); //Visual refresh to input type and toggle button
+		makeGuideAlert = true; //Reset the flag to make guide alert on the next visit
 		window.localStorage.setItem(guideAlertKey, JSON.stringify(makeGuideAlert));
 	}
 }
 
-function loadMode() {
+function loadVisualMode() {
 	let mode = window.localStorage.getItem(darkSwitchKey);
 	setDarkModeAssets(mode != null);
 }
@@ -108,4 +107,27 @@ function updateMode() {
 	}
 
 	setDarkModeAssets(mode == null);
+}
+
+function loadPasswordType() {
+	let aux = window.localStorage.getItem(showPasswordKey);
+	togglePassAux(!Boolean(JSON.parse(aux)));
+}
+
+function toggleVisiblePassword() {
+	let aux = window.localStorage.getItem(showPasswordKey);
+	showPassword = Boolean(JSON.parse(aux));
+	togglePassAux(showPassword);
+	showPassword = !showPassword;
+	window.localStorage.setItem(showPasswordKey, showPassword);
+}
+
+function togglePassAux(bool) {
+	if (bool) {
+		passwordField.type = "password";
+		togglePasswordIcon.className = " fa fa-eye-slash fa-lg";
+	} else {
+		passwordField.type = "text";
+		togglePasswordIcon.className = " fa fa-eye fa-lg";
+	}
 }

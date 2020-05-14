@@ -33,10 +33,10 @@ function updateBar(value) {
 }
 
 //Optimizes the sqrt function
-function inverseSqrEase(t) {
+function inverseSqr(t) {
 	//t is in [0,1]
 	t = 1 - t;
-	t = t * t * t;
+	t = t * t;
 	return 1 - t;
 }
 
@@ -45,13 +45,14 @@ function arriveEase(rad, dist) {
 		return rad;
 	}
 	let t = dist / rad;
+	t = inverseSqr(t);
 	return t * rad;
 }
 
 //Arrive steering behaviour
 function arrive(position, target, dt) {
-	const thresholdRadius = target * 0.5;
-	const speed = 2;
+	const thresholdRadius = target * 0.5; //Desaceleration radius
+	const speed = 3;
 
 	let direction = Math.sign(target - position);
 	let distance = Math.abs(target - position);
@@ -75,10 +76,13 @@ function computeStrength(passwordValues) {
 function showStrength(password, passStrength) {
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
-	let para = document.createElement("P"); //Where the result content goes
-	if (passStrength < 35) {
+	const lowValue = 35;
+	const medValue = 70;
+	let paragraph = document.createElement("P"); //Where the result content goes
+	if (passStrength < lowValue) {
 		strengthDisplay.className = "alert alert-danger";
 		let linkElem = document.createElement("A");
+		linkElem.target = "_blank"; //To open on a new tab
 		linkElem.href =
 			"https://www.mentalfloss.com/article/504786/8-tips-make-your-passwords-strong-possible";
 		linkElem.className = " alert-link";
@@ -87,10 +91,10 @@ function showStrength(password, passStrength) {
 		let displayText = document.createTextNode(
 			"Your password '" + password + "' is vulnerable! "
 		);
-		para.appendChild(displayText);
-		para.appendChild(linkElem);
+		paragraph.appendChild(displayText);
+		paragraph.appendChild(linkElem);
 	} else {
-		if (passStrength < 70) {
+		if (passStrength < medValue) {
 			strengthDisplay.className = "alert alert-warning";
 			let emElem = document.createElement("EM");
 			let emText = document.createTextNode("weak");
@@ -98,8 +102,8 @@ function showStrength(password, passStrength) {
 			let displayText = document.createTextNode(
 				"Your password '" + password + "' looks "
 			);
-			para.appendChild(displayText);
-			para.appendChild(emElem);
+			paragraph.appendChild(displayText);
+			paragraph.appendChild(emElem);
 		} else {
 			strengthDisplay.className = "alert alert-success";
 			let strongElem = document.createElement("STRONG");
@@ -108,11 +112,11 @@ function showStrength(password, passStrength) {
 			let displayText = document.createTextNode(
 				"Your password '" + password + "' is "
 			);
-			para.appendChild(displayText);
-			para.appendChild(strongElem);
+			paragraph.appendChild(displayText);
+			paragraph.appendChild(strongElem);
 		}
 	}
-	strengthDisplay.replaceChild(para, strengthDisplay.firstChild); //Updates the alert with the new content
+	strengthDisplay.replaceChild(paragraph, strengthDisplay.firstChild); //Updates the alert with the new content
 }
 
 function hasMinLength(password) {
