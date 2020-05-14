@@ -37,17 +37,19 @@ const helpModalTips = [
 	"Press H to toggle on/off the history table",
 	"You can always delete the history by clicking the 'Clear Data' button",
 	"Try the dark mode by clicking the switch at the upper right corner!",
+	"You can visualize the password you submitted on the central display only if you have ticked the 'see password' button"
 ];
-const resultTableDesciption = "Here you can see the properties that your password has";
+const resultTableDesciption = "Result Table";
 const resultTableHeaderDesc = ["Propierties of your password", ""]; //Last element is for completion of visual borderer on header
 const resultTableBodyDesc = [
-	"At least " + minLength + " characters",
-	"Has Numbers",
-	"Has Letters",
-	"Has Symbols",
-	"Upper Case",
-	"Lower Case",
+	"Has at least " + minLength + " characters",
+	"Has numbers",
+	"Has letters",
+	"Has symbols",
+	"Has upper Case",
+	"Has lower Case",
 ];
+const historyTableDescription = "History Table";
 const historyTableHeaderDesc = [
 	"Last " + maxPastPasswordsCount + " password(s)",
 	"Strength",
@@ -138,7 +140,7 @@ function onloadPage() {
 		historyTableId,
 		historyTableHeaderDesc,
 		pastPasswords,
-		null
+		historyTableDescription
 	);
 	initializeTable(
 		resultTableParentId,
@@ -148,7 +150,7 @@ function onloadPage() {
 		resultTableDesciption
 	);
 
-	//Initialize tooltip elements to work properly
+	//Initialize tooltip elements to work properly.
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()
 	})

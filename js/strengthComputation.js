@@ -75,8 +75,7 @@ function computeStrength(passwordValues) {
 
 function showStrength(password, passStrength) {
 	let passwordText;
-	Boolean(showPassword) ? passwordText = " '" + password + "' " : passwordText = " "; //For the alert
-	console.log("showPassword es " + showPassword);
+	Boolean(showPassword) ? passwordText = " '" + password + "' " : passwordText = " "; //For the alert display
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
 	const lowValue = 35;

@@ -30,7 +30,7 @@ function updateIconCell(cell, propertyValue) {
 	} else {
 		icon.className = " fa fa-times fa-lg";
 	}
-	cell.replaceChild(icon, cell.firstElementChild); //Removes the old child and
+	cell.replaceChild(icon, cell.firstElementChild);
 }
 
 function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs, tableDescription) {

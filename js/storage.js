@@ -116,17 +116,14 @@ function loadPasswordType() {
 		showPassword = false; //If showPassword was undefined
 	}
 	togglePassAux(showPassword);
-	console.log("Cargo con " + showPassword);
 }
 
 function toggleVisiblePassword() {
-	console.log("Entro con valor " + showPassword);
 	let aux = window.localStorage.getItem(showPasswordKey);
 	showPassword = Boolean(JSON.parse(aux));
 	showPassword = !showPassword;
 	togglePassAux(showPassword);
 	window.localStorage.setItem(showPasswordKey, JSON.stringify(showPassword));
-	console.log("Salgo con valor " + showPassword);
 }
 
 function togglePassAux(bool) {
