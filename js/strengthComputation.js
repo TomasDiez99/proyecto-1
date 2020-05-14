@@ -74,6 +74,9 @@ function computeStrength(passwordValues) {
 }
 
 function showStrength(password, passStrength) {
+	let passwordText;
+	Boolean(showPassword) ? passwordText = " '" + password + "' " : passwordText = " "; //For the alert
+	console.log("showPassword es " + showPassword);
 	strengthDisplay.style.visibility = "visible";
 	updateBar(passStrength);
 	const lowValue = 35;
@@ -89,7 +92,7 @@ function showStrength(password, passStrength) {
 		let linkText = document.createTextNode("Learn more");
 		linkElem.appendChild(linkText);
 		let displayText = document.createTextNode(
-			"Your password '" + password + "' is vulnerable! "
+			"Your password" + passwordText + "is vulnerable! "
 		);
 		paragraph.appendChild(displayText);
 		paragraph.appendChild(linkElem);
@@ -100,7 +103,7 @@ function showStrength(password, passStrength) {
 			let emText = document.createTextNode("weak");
 			emElem.appendChild(emText);
 			let displayText = document.createTextNode(
-				"Your password '" + password + "' looks "
+				"Your password" + passwordText + "looks "
 			);
 			paragraph.appendChild(displayText);
 			paragraph.appendChild(emElem);
@@ -110,7 +113,7 @@ function showStrength(password, passStrength) {
 			let strongText = document.createTextNode("strong!");
 			strongElem.appendChild(strongText);
 			let displayText = document.createTextNode(
-				"Your password '" + password + "' is "
+				"Your password" + passwordText + "is "
 			);
 			paragraph.appendChild(displayText);
 			paragraph.appendChild(strongElem);

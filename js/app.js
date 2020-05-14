@@ -38,6 +38,7 @@ const helpModalTips = [
 	"You can always delete the history by clicking the 'Clear Data' button",
 	"Try the dark mode by clicking the switch at the upper right corner!",
 ];
+const resultTableDesciption = "Here you can see the properties that your password has";
 const resultTableHeaderDesc = ["Propierties of your password", ""]; //Last element is for completion of visual borderer on header
 const resultTableBodyDesc = [
 	"At least " + minLength + " characters",
@@ -136,13 +137,15 @@ function onloadPage() {
 		historyTableParentId,
 		historyTableId,
 		historyTableHeaderDesc,
-		pastPasswords
+		pastPasswords,
+		null
 	);
 	initializeTable(
 		resultTableParentId,
 		resultTableId,
 		resultTableHeaderDesc,
-		buildPairs(resultTableBodyDesc, null, resultTableBodyDesc.length)
+		buildPairs(resultTableBodyDesc, null, resultTableBodyDesc.length),
+		resultTableDesciption
 	);
 
 	//Initialize tooltip elements to work properly

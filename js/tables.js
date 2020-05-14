@@ -33,9 +33,13 @@ function updateIconCell(cell, propertyValue) {
 	cell.replaceChild(icon, cell.firstElementChild); //Removes the old child and
 }
 
-function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs) {
+function initializeTable(parentId, tableId, tableHeaderDesc, tablePairs, tableDescription) {
 	let myTable = document.createElement("TABLE");
 	myTable.id = tableId;
+	if (tableDescription != null) {
+		myTable.setAttribute("data-toggle", "tooltip");
+		myTable.setAttribute("title", tableDescription);
+	}
 	myTable.className += " table";
 	myTable.className += " table-responsive";
 	myTable.className += " custom-table";

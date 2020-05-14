@@ -111,23 +111,30 @@ function updateMode() {
 
 function loadPasswordType() {
 	let aux = window.localStorage.getItem(showPasswordKey);
-	togglePassAux(!Boolean(JSON.parse(aux)));
+	showPassword = JSON.parse(aux);
+	if (!showPassword || showPassword == "undefined") {
+		showPassword = false; //If showPassword was undefined
+	}
+	togglePassAux(showPassword);
+	console.log("Cargo con " + showPassword);
 }
 
 function toggleVisiblePassword() {
+	console.log("Entro con valor " + showPassword);
 	let aux = window.localStorage.getItem(showPasswordKey);
 	showPassword = Boolean(JSON.parse(aux));
-	togglePassAux(showPassword);
 	showPassword = !showPassword;
-	window.localStorage.setItem(showPasswordKey, showPassword);
+	togglePassAux(showPassword);
+	window.localStorage.setItem(showPasswordKey, JSON.stringify(showPassword));
+	console.log("Salgo con valor " + showPassword);
 }
 
 function togglePassAux(bool) {
 	if (bool) {
-		passwordField.type = "password";
-		togglePasswordIcon.className = " fa fa-eye-slash fa-lg";
-	} else {
 		passwordField.type = "text";
 		togglePasswordIcon.className = " fa fa-eye fa-lg";
+	} else {
+		passwordField.type = "password";
+		togglePasswordIcon.className = " fa fa-eye-slash fa-lg";
 	}
 }
